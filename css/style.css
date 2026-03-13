@@ -43,16 +43,19 @@ html.dark body {
 }
 html.dark #phone-wrap { background: #0f172a; }
 
-/* 真實手機：隱藏模擬狀態列，直接用系統狀態列 */
+/* 預設隱藏模擬狀態列（手機直接用系統狀態列） */
+#status-bar { display: none; }
+
+/* 手機：全螢幕、無外框 */
 @media (max-width: 479px) {
-    #status-bar { display: none; }
     body { background: #f8fafc; }
     html.dark body { background: #0f172a; }
     #phone-wrap { max-height: 100svh; border-radius: 0; box-shadow: none; }
 }
 
-/* 桌機：顯示手機外框 */
+/* 桌機：顯示手機外框＋模擬狀態列 */
 @media (min-width: 480px) {
+    #status-bar { display: flex; }
     body { padding: 20px; }
     #phone-wrap {
         border-radius: 50px;
