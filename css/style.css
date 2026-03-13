@@ -3,13 +3,19 @@
 /* ===== RESET & BASE ===== */
 *, *::before, *::after { box-sizing: border-box; }
 
+html {
+    height: 100%;
+    /* iOS Safari 舊版相容 */
+    height: -webkit-fill-available;
+}
+
 html, body {
     margin: 0; padding: 0;
     font-family: 'Inter', 'PingFang TC', 'Microsoft JhengHei', -apple-system, sans-serif;
     overscroll-behavior: none;
     -webkit-tap-highlight-color: transparent;
     user-select: none; -webkit-user-select: none;
-    height: 100%;
+    overflow: hidden; /* 鎖死頁面捲動 */
 }
 input, textarea { user-select: auto; -webkit-user-select: auto; }
 button, a { touch-action: manipulation; }
@@ -17,23 +23,24 @@ button, a { touch-action: manipulation; }
 /* ===== MOBILE-FIRST LAYOUT ===== */
 body {
     background: #f8fafc;
-    min-height: 100svh;
+    /* dvh = dynamic viewport height，會隨 Safari 工具列收合正確更新 */
+    height: 100dvh;
+    height: -webkit-fill-available;
 }
 html.dark body { background: #0f172a; }
 
-/* 永遠隱藏模擬狀態列（純手機 app，用系統狀態列） */
+/* 永遠隱藏模擬狀態列 */
 #status-bar { display: none; }
 
 #phone-wrap {
-    position: relative;
-    width: 100%;
+    position: fixed; /* fixed 確保不受頁面捲動影響 */
+    inset: 0;        /* top/right/bottom/left: 0 */
     max-width: 480px;
     margin: 0 auto;
-    height: 100svh;
     background: #f8fafc;
-    overflow: hidden;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 html.dark #phone-wrap { background: #0f172a; }
 
@@ -89,7 +96,9 @@ html.dark #status-bar { color: #f1f5f9; }
 /* ===== APP NAV BAR (iOS-style) ===== */
 .app-nav-bar {
     flex-shrink: 0;
-    height: 52px;
+    /* 頂部 safe area（iPhone 瀏海/動態島） */
+    padding-top: env(safe-area-inset-top, 0px);
+    height: calc(52px + env(safe-area-inset-top, 0px));
     display: flex;
     align-items: center;
     justify-content: space-between;
