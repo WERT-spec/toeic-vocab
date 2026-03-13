@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="antialiased">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
+    <title>TOEIC 30天單字集</title>
+    <script>tailwind.config = { darkMode: 'class' }</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="logo.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="icon-180.png">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Phone wrap (acts as device frame on desktop) -->
+<div id="phone-wrap">
+
+
+    <!-- Scrollable App Content -->
+    <div id="app">
+
+        <!-- ===== SCREEN: HOME ===== -->
+        <div id="screen-home" class="screen">
+            <header class="app-nav-bar">
+                <div class="app-nav-title">TOEIC 單字訓練</div>
+                <button onclick="toggleDarkMode()" id="dark-mode-btn" class="nav-icon-btn">🌙</button>
+            </header>
+
+            <div class="screen-body">
+                <div id="streak-display" class="streak-banner hidden">🔥 <span id="streak-text"></span></div>
+
+                <!-- Day Grid -->
+                <div class="section-card">
+                    <div class="section-label">選擇天次</div>
+                    <div class="grid grid-cols-5 gap-2" id="day-grid"></div>
+                </div>
+
+                <!-- Selected Day Panel -->
+                <div id="day-panel" class="hidden section-card border-indigo-100 dark:border-indigo-900/50">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <div id="panel-day-label" class="text-3xl font-black text-indigo-600 dark:text-indigo-400 tracking-wider"></div>
+                            <div id="panel-word-count" class="text-sm text-slate-400 mt-0.5"></div>
+                        </div>
+                        <div id="panel-best-score" class="text-right"></div>
+                    </div>
+                    <div class="flex gap-3">
+                        <button onclick="goStudy()" class="btn-primary flex-1">📚 開始學習</button>
+                        <button onclick="goQuiz()" class="btn-ghost flex-1">🎯 開始測驗</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SCREEN: STUDY ===== -->
+        <div id="screen-study" class="screen hidden">
+            <header class="app-nav-bar">
+                <button onclick="switchScreen('home')" class="nav-back-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                </button>
+                <div class="app-nav-title" id="study-day-label">DAY 01</div>
+                <button onclick="toggleDarkMode()" id="dark-mode-btn-study" class="nav-icon-btn">🌙</button>
+            </header>
+
+            <div class="screen-body">
+                <!-- Range Pills -->
+                <div class="flex flex-wrap gap-2 mb-3" id="study-range-pills"></div>
+
+                <!-- Sub-tab Toggle -->
+                <div class="seg-control mb-4">
+                    <button onclick="switchStudySubTab('cards')" id="study-tab-cards" class="seg-btn seg-btn-active">🃏 卡片</button>
+                    <button onclick="switchStudySubTab('list')"  id="study-tab-list"  class="seg-btn">📋 列表</button>
+                </div>
+
+                <!-- Cards Sub-view -->
+                <div id="study-cards-view">
+                    <div id="card-area">
+                        <div class="card-flip w-full h-72 mb-6">
+                            <div id="flashcard-inner" class="card-inner relative w-full h-full" onclick="handleCardClick(event)">
+                                <div class="card-front bg-white rounded-2xl shadow-md border border-slate-200 flex flex-col items-center justify-center p-6 text-center">
+                                    <h2 id="card-word" class="text-4xl font-bold text-slate-800 dark:text-slate-100 mb-4 tracking-tight text-center px-2 break-all">word</h2>
+                                    <div class="flex flex-row items-center gap-3">
+                                        <button id="card-audio-btn" onclick="playVocabAudio('card', this, event)" class="w-12 h-12 flex items-center justify-center bg-slate-50 rounded-full text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all border border-slate-200 shadow-sm active:scale-95">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>
+                                        </button>
+                                        <div class="bg-indigo-50 px-4 py-1.5 rounded-full border border-indigo-100">
+                                            <span id="card-info" class="text-indigo-600 font-medium text-xs italic"></span>
+                                        </div>
+                                    </div>
+                                    <p class="text-slate-300 text-[10px] mt-6 uppercase tracking-widest font-bold">點擊卡片空白處翻面</p>
+                                </div>
+                                <div class="card-back bg-indigo-600 rounded-2xl shadow-md flex flex-col items-center justify-center p-6 text-center text-white">
+                                    <h2 id="card-meaning" class="text-3xl font-bold px-4 leading-snug">解釋內容</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center px-4">
+                            <button onclick="prevCard()" class="card-nav-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                            </button>
+                            <span id="card-progress" class="card-progress-badge">0 / 0</span>
+                            <button onclick="nextCard()" class="card-nav-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- List Sub-view -->
+                <div id="study-list-view" class="hidden">
+                    <div class="section-card p-0 overflow-hidden">
+                        <table class="w-full text-left border-collapse table-fixed">
+                            <thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-400 text-[10px] font-bold border-b border-slate-100 dark:border-slate-800 hidden sm:table-header-group">
+                                <tr>
+                                    <th class="py-3 w-10 text-center pl-3">#</th>
+                                    <th class="py-3 w-[50%] pl-2">單字與發音</th>
+                                    <th class="py-3 pr-3 text-left">詞性與意思</th>
+                                </tr>
+                            </thead>
+                            <tbody id="vocab-table-body" class="text-sm"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Go to Quiz CTA -->
+                <div id="study-quiz-cta" class="hidden mt-4">
+                    <button onclick="goQuiz()" class="btn-tinted w-full">🎯 前往測驗</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SCREEN: QUIZ ===== -->
+        <div id="screen-quiz" class="screen hidden">
+
+            <!-- QUIZ SETUP -->
+            <div id="quiz-setup">
+                <header class="app-nav-bar">
+                    <button onclick="switchScreen('home')" class="nav-back-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                    </button>
+                    <div class="app-nav-title" id="quiz-setup-day-label">DAY 01</div>
+                    <button onclick="toggleDarkMode()" id="dark-mode-btn-quiz" class="nav-icon-btn">🌙</button>
+                </header>
+                <div class="screen-body">
+                    <div class="section-card">
+                        <div class="section-label">選擇範圍</div>
+                        <div class="flex flex-wrap gap-2" id="quiz-range-pills"></div>
+                    </div>
+
+                    <div class="section-card">
+                        <div class="section-label">選擇模式</div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button onclick="selectQuizMode('en-zh')" id="mode-card-en-zh" class="quiz-mode-card p-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700 text-left active:scale-95 transition-all">
+                                <div class="text-2xl mb-2">📝</div>
+                                <div class="font-bold text-slate-700 dark:text-slate-200 text-sm">選擇題</div>
+                                <div class="text-xs text-slate-400 mt-0.5">英文 → 中文</div>
+                            </button>
+                            <button onclick="selectQuizMode('zh-en-type')" id="mode-card-zh-en-type" class="quiz-mode-card p-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700 text-left active:scale-95 transition-all">
+                                <div class="text-2xl mb-2">⌨️</div>
+                                <div class="font-bold text-slate-700 dark:text-slate-200 text-sm">拼字填空</div>
+                                <div class="text-xs text-slate-400 mt-0.5">中文 → 英文</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="quiz-last-score" class="hidden text-center text-sm text-slate-400 -mt-1 mb-1"></div>
+                    <button onclick="startQuizFromSetup()" class="btn-primary w-full text-lg">開始測驗</button>
+                </div>
+            </div>
+
+            <!-- QUIZ ACTIVE -->
+            <div id="quiz-active" class="hidden">
+                <header class="app-nav-bar">
+                    <button onclick="abandonQuiz()" class="nav-back-btn text-red-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                    <span id="quiz-progress-text" class="text-xs font-bold text-slate-500 tracking-widest">第 1 / 40 題</span>
+                    <span id="quiz-score-display" class="text-sm font-bold text-indigo-600 dark:text-indigo-400">0 分</span>
+                </header>
+                <!-- Progress Bar (below nav bar) -->
+                <div class="quiz-progress-bar mx-4">
+                    <div id="quiz-progress-fill" class="quiz-progress-bar-fill" style="width:0%"></div>
+                </div>
+
+                <div class="screen-body pt-3">
+                    <div class="section-card min-h-[280px] flex flex-col">
+                        <div class="flex items-start justify-between gap-4 mb-5">
+                            <h3 id="quiz-question" class="text-xl font-bold text-slate-800 dark:text-slate-100 leading-tight flex-1">載入中...</h3>
+                            <button id="quiz-audio-btn" onclick="playVocabAudio('quiz', this, event)" class="audio-btn flex-shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>
+                            </button>
+                        </div>
+                        <div id="quiz-options" class="space-y-3 hidden flex-1"></div>
+                        <div id="quiz-typing" class="hidden flex-1">
+                            <div id="typing-tiles" class="flex flex-wrap justify-center gap-1.5 mb-5 min-h-[52px]"></div>
+                            <input type="text" id="typing-input" autocomplete="off" spellcheck="false" placeholder="輸入英文單字後按 Enter…"
+                                class="w-full p-4 border-2 border-slate-200 dark:border-slate-700 rounded-xl mb-3 font-bold text-lg text-slate-700 dark:text-slate-200 dark:bg-slate-800 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-900/40 transition-all text-center tracking-widest">
+                            <button onclick="giveHint()" id="hint-btn" class="w-full py-4 bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 border-2 border-amber-200 dark:border-amber-800 rounded-xl font-bold text-sm hover:bg-amber-100 active:scale-95 transition-all">
+                                💡 提示 <span id="hint-cost" class="text-amber-400 text-xs font-normal">(-5分)</span>
+                            </button>
+                        </div>
+                        <div id="quiz-feedback" class="mt-4 hidden p-4 rounded-xl text-base font-medium leading-relaxed border"></div>
+                    </div>
+                    <button id="next-quiz-btn" onclick="advanceQuiz()" class="btn-primary w-full text-base hidden">下一題 ➔</button>
+                </div>
+            </div>
+
+            <!-- QUIZ RESULTS -->
+            <div id="quiz-results" class="hidden">
+                <header class="app-nav-bar">
+                    <div></div>
+                    <div class="app-nav-title">測驗結果</div>
+                    <button onclick="toggleDarkMode()" id="dark-mode-btn-results" class="nav-icon-btn">🌙</button>
+                </header>
+                <div class="screen-body">
+                    <div class="text-center mb-5 section-card">
+                        <p id="results-day-label" class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3"></p>
+                        <div id="results-score" class="text-8xl font-black mb-1"></div>
+                        <p class="text-slate-400 text-sm mb-3">分 / 100</p>
+                        <div id="results-stars" class="text-3xl mb-3"></div>
+                        <p id="results-summary" class="text-slate-500 text-sm font-medium"></p>
+                    </div>
+
+                    <!-- Missed Words -->
+                    <div id="missed-section" class="hidden section-card border-red-100 dark:border-red-900/30 mb-4 p-0 overflow-hidden">
+                        <button onclick="toggleMissedWords()" class="w-full flex items-center justify-between p-4 text-left">
+                            <span id="missed-title" class="font-bold text-red-500 dark:text-red-400 text-sm"></span>
+                            <svg id="missed-chevron" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div id="missed-list" class="hidden divide-y divide-slate-100 dark:divide-slate-800"></div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <button onclick="retryQuiz()" class="btn-primary w-full">🔄 再測一次</button>
+                        <button onclick="reviewMissedWords()" id="review-missed-btn" class="btn-ghost hidden w-full">📚 複習錯誤單字</button>
+                        <button onclick="switchScreen('home')" class="btn-plain w-full">返回主頁</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SCREEN: STATS ===== -->
+        <div id="screen-stats" class="screen hidden">
+            <header class="app-nav-bar">
+                <div></div>
+                <div class="app-nav-title">學習統計</div>
+                <button onclick="toggleDarkMode()" id="dark-mode-btn-stats" class="nav-icon-btn">🌙</button>
+            </header>
+            <div class="screen-body">
+                <div class="section-card">
+                    <div class="section-label">需要加強的單字</div>
+                    <div id="weak-words-list" class="text-sm text-slate-500">載入中...</div>
+                </div>
+                <div class="section-card">
+                    <div class="section-label">測驗歷史</div>
+                    <div id="history-list" class="space-y-2">載入中...</div>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /#app -->
+
+    <!-- Bottom Navigation Bar -->
+    <div id="bottom-nav">
+        <button onclick="switchScreen('home')" id="tab-home" class="tab-btn tab-btn-active">
+            <svg xmlns="http://www.w3.org/2000/svg" class="tab-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+            <span class="tab-label">主頁</span>
+        </button>
+        <button onclick="switchScreen('study')" id="tab-study" class="tab-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" class="tab-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+            <span class="tab-label">學習</span>
+        </button>
+        <button onclick="switchScreen('quiz')" id="tab-quiz" class="tab-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" class="tab-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
+            <span class="tab-label">測驗</span>
+        </button>
+        <button onclick="switchScreen('stats')" id="tab-stats" class="tab-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" class="tab-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+            <span class="tab-label">統計</span>
+        </button>
+    </div>
+
+</div><!-- /#phone-wrap -->
+
+<script src="js/vocab.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
