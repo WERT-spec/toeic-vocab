@@ -213,13 +213,22 @@ html.dark .btn-tinted { background: rgba(99,102,241,0.12); color: #a5b4fc; }
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-top: 1px solid rgba(0,0,0,0.07);
-    /* 讓背景延伸到 home indicator 區域 */
-    box-shadow: 0 env(safe-area-inset-bottom, 34px) 0 0 rgba(248,250,252,0.97);
 }
 html.dark #bottom-nav {
     background: rgba(15,23,42,0.97);
     border-top-color: rgba(255,255,255,0.07);
-    box-shadow: 0 env(safe-area-inset-bottom, 34px) 0 0 rgba(15,23,42,0.97);
+}
+/* 填滿 home indicator 底部空白 */
+#bottom-nav::after {
+    content: '';
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: env(safe-area-inset-bottom, 34px);
+    background: rgba(248,250,252,0.97);
+    z-index: -1;
+}
+html.dark #bottom-nav::after {
+    background: rgba(15,23,42,0.97);
 }
 
 .tab-btn {
