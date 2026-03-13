@@ -14,70 +14,28 @@ html, body {
 input, textarea { user-select: auto; -webkit-user-select: auto; }
 button, a { touch-action: manipulation; }
 
-/* ===== DESKTOP BACKGROUND ===== */
+/* ===== MOBILE-FIRST LAYOUT ===== */
 body {
-    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #1e293b 100%);
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: #f8fafc;
+    min-height: 100svh;
 }
-html.dark body {
-    background: linear-gradient(135deg, #0a0818 0%, #1e1b4b 40%, #0f172a 100%);
-}
+html.dark body { background: #0f172a; }
 
-/* ===== PHONE FRAME ===== */
+/* 永遠隱藏模擬狀態列（純手機 app，用系統狀態列） */
+#status-bar { display: none; }
+
 #phone-wrap {
     position: relative;
     width: 100%;
-    max-width: 393px;
+    max-width: 480px;
+    margin: 0 auto;
     height: 100svh;
-    max-height: 852px;
     background: #f8fafc;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    /* Native phone shadow & frame on desktop */
-    border-radius: 0;
-    box-shadow: none;
 }
 html.dark #phone-wrap { background: #0f172a; }
-
-/* 預設隱藏模擬狀態列（手機直接用系統狀態列） */
-#status-bar { display: none; }
-
-/* 手機：全螢幕、無外框 */
-@media (max-width: 479px) {
-    body { background: #f8fafc; }
-    html.dark body { background: #0f172a; }
-    #phone-wrap { max-height: 100svh; border-radius: 0; box-shadow: none; }
-}
-
-/* 桌機：顯示手機外框＋模擬狀態列 */
-@media (min-width: 480px) {
-    #status-bar { display: flex; }
-    body { padding: 20px; }
-    #phone-wrap {
-        border-radius: 50px;
-        box-shadow:
-            0 0 0 1px rgba(255,255,255,0.08),
-            0 0 0 10px #1a1a2e,
-            0 0 0 12px rgba(255,255,255,0.04),
-            0 40px 80px rgba(0,0,0,0.6),
-            0 20px 40px rgba(0,0,0,0.4);
-    }
-    /* Notch effect */
-    #phone-wrap::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 50%;
-        transform: translateX(-50%);
-        width: 126px; height: 34px;
-        background: #1a1a2e;
-        border-radius: 0 0 20px 20px;
-        z-index: 100;
-    }
-}
 
 /* ===== STATUS BAR ===== */
 #status-bar {
