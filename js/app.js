@@ -766,21 +766,11 @@ function renderStatsScreen() {
     }
 }
 
-// ===== STATUS BAR CLOCK =====
-function updateClock() {
-    const el = document.getElementById('sb-time');
-    if (!el) return;
-    const now = new Date();
-    el.textContent = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-}
-
 // ===== INIT =====
 
 window.onload = () => {
     loadPrefs();
     state.card.activeList = getSubList(state.range);
-    updateClock();
-    setInterval(updateClock, 10000);
     renderHomeScreen();
     document.getElementById('tab-home').classList.add('tab-btn-active');
 };

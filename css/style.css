@@ -29,9 +29,6 @@ body {
 }
 html.dark body { background: #0f172a; }
 
-/* 永遠隱藏模擬狀態列 */
-#status-bar { display: none; }
-
 #phone-wrap {
     position: fixed; /* fixed 確保不受頁面捲動影響 */
     inset: 0;        /* top/right/bottom/left: 0 */
@@ -44,25 +41,6 @@ html.dark body { background: #0f172a; }
 }
 html.dark #phone-wrap { background: #0f172a; }
 
-/* ===== STATUS BAR ===== */
-#status-bar {
-    flex-shrink: 0;
-    height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 28px;
-    font-size: 13px;
-    font-weight: 700;
-    color: #0f172a;
-    background: transparent;
-    position: relative;
-    z-index: 10;
-}
-html.dark #status-bar { color: #f1f5f9; }
-
-#sb-time { font-variant-numeric: tabular-nums; letter-spacing: -0.3px; }
-.sb-icons { display: flex; align-items: center; gap: 6px; }
 
 /* ===== APP CONTENT (SCROLLABLE) ===== */
 #app {
