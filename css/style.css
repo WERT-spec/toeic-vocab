@@ -208,15 +208,18 @@ html.dark .btn-tinted { background: rgba(99,102,241,0.12); color: #a5b4fc; }
     align-items: flex-start;
     justify-content: space-around;
     padding-top: 10px;
-    padding-bottom: env(safe-area-inset-bottom, 34px);
+    padding-bottom: 10px;
     background: rgba(248,250,252,0.97);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-top: 1px solid rgba(0,0,0,0.07);
+    /* 讓背景延伸到 home indicator 區域 */
+    box-shadow: 0 env(safe-area-inset-bottom, 34px) 0 0 rgba(248,250,252,0.97);
 }
 html.dark #bottom-nav {
     background: rgba(15,23,42,0.97);
     border-top-color: rgba(255,255,255,0.07);
+    box-shadow: 0 env(safe-area-inset-bottom, 34px) 0 0 rgba(15,23,42,0.97);
 }
 
 .tab-btn {
