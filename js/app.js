@@ -26,30 +26,73 @@ const MODE_CONFIG = {
 };
 
 // --- 語音播放 (Web Speech API) ---
+
+function playVocabAudio(type, btnElement, event) {
+    if (event) event.stopPropagation();
+    try {
+        let text = '';
+        if (type === 'card') {
+            text = state.card.activeList[state.card.idx].w;
+        } else if (type === 'quiz') {
+            text = state.quiz.targetWord.w;
+        }
+        if (text) {
+            // Remove accents for better TTS compatibility (e.g. résumé -> resume)
+            const cleanText = text.normalize('NFD').replace(/[̀-ͯ]/g, '');
+            playAudio(cleanText, btnElement, event);
+        }
+    } catch (e) {
+        console.error('Audio playback error:', e);
+    }
+}
+
 function normalize(str) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 }
 
+
+// Global reference to prevent garbage collection bugs in some browsers
+let currentUtterance = null;
 function playAudio(text, btnElement, event) {
     if (event) event.stopPropagation();
-
-    if (!('speechSynthesis' in window)) {
-        alert('您的瀏覽器不支援語音播放功能。建議使用 Chrome 或 Safari。');
+    if (!window.speechSynthesis) {
+        console.warn('speechSynthesis not supported');
         return;
     }
 
-    if (btnElement) btnElement.classList.add('is-speaking');
-
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'en-US';
-    utterance.rate = 0.9;
-
-    const resetBtn = () => { if (btnElement) btnElement.classList.remove('is-speaking'); };
-    utterance.onend = resetBtn;
-    utterance.onerror = resetBtn;
-
+    // Force resume and cancel previous
+    window.speechSynthesis.resume();
     window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utterance);
+
+    if (btnElement) {
+        btnElement.classList.add('is-speaking');
+        // Fallback cleanup
+        setTimeout(() => btnElement.classList.remove('is-speaking'), 3000);
+    }
+
+    // Normalize text (remove accents) for better TTS compatibility
+    const normalizedText = text.normalize('NFD').replace(/[̀-ͯ]/g, '');
+    
+    currentUtterance = new SpeechSynthesisUtterance(normalizedText);
+    currentUtterance.lang = 'en-US';
+    currentUtterance.rate = 0.9;
+    currentUtterance.volume = 1.0;
+    
+    currentUtterance.onstart = () => console.log('TTS started:', normalizedText);
+    currentUtterance.onend = () => {
+        console.log('TTS ended');
+        if (btnElement) btnElement.classList.remove('is-speaking');
+    };
+    currentUtterance.onerror = (e) => {
+        console.error('TTS Error:', e);
+        if (btnElement) btnElement.classList.remove('is-speaking');
+    };
+
+    // Chrome Bug Fix: sometimes speak() needs to be wrapped in a timeout
+    // and voices need to be loaded.
+    setTimeout(() => {
+        window.speechSynthesis.speak(currentUtterance);
+    }, 50);
 }
 
 function getSubList(range) {
@@ -193,13 +236,30 @@ function toggleGlobalRangeSelector() {
 }
 
 // --- 分頁切換 ---
+
 function switchTab(tab) {
     ['list', 'cards', 'quiz'].forEach(s => {
-        document.getElementById(`section-${s}`).classList.add('hidden');
-        document.getElementById(`tab-${s}`).className = 'flex-1 py-3 text-sm rounded-lg text-slate-600 hover:bg-slate-50 transition-all';
+        document.getElementById('section-' + s).classList.add('hidden');
+        
+        const btn = document.getElementById('tab-' + s);
+        if (btn) {
+            btn.classList.remove('text-indigo-600', 'dark:text-indigo-400');
+            btn.classList.add('text-slate-400', 'dark:text-slate-500');
+            btn.style.transform = 'scale(1)';
+        }
     });
-    document.getElementById(`section-${tab}`).classList.remove('hidden');
-    document.getElementById(`tab-${tab}`).className = 'flex-1 py-3 text-sm rounded-lg bg-indigo-600 text-white shadow-sm transition-all';
+    
+    document.getElementById('section-' + tab).classList.remove('hidden');
+    
+    const activeBtn = document.getElementById('tab-' + tab);
+    if (activeBtn) {
+        activeBtn.classList.remove('text-slate-400', 'dark:text-slate-500');
+        activeBtn.classList.add('text-indigo-600', 'dark:text-indigo-400');
+        activeBtn.style.transform = 'scale(1.1)';
+        activeBtn.classList.add('animate-pop');
+        setTimeout(() => activeBtn.classList.remove('animate-pop'), 400);
+    }
+    
     if (tab === 'quiz')  showQuizSetup();
     if (tab === 'cards') setCardRange(state.card.range || 'all');
 }

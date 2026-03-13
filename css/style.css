@@ -1,5 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-body { font-family: 'Inter', 'PingFang TC', 'Microsoft JhengHei', sans-serif; }
+body {
+    /* 防止下拉更新與左右滑動邊緣回彈 */
+    overscroll-behavior-y: none;
+    /* 移除點擊時出現的半透明閃爍方塊 */
+    -webkit-tap-highlight-color: transparent;
+    /* 禁止選取文字，讓它更像 App */
+    user-select: none;
+    -webkit-user-select: none; font-family: 'Inter', 'PingFang TC', 'Microsoft JhengHei', sans-serif; }
 .card-flip { perspective: 1000px; }
 .card-inner { transition: transform 0.6s; transform-style: preserve-3d; cursor: pointer; }
 .card-inner.flipped { transform: rotateY(180deg); }
@@ -274,4 +281,19 @@ html.dark #result-score-display {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+}
+
+/* 確保輸入框可以正常選取與操作 */
+input, textarea {
+    user-select: auto;
+    -webkit-user-select: auto;
+}
+
+
+/* PWA Safe Area for iPhones with notch/home indicator */
+.pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 20px);
+}
+.pt-safe {
+    padding-top: env(safe-area-inset-top, 20px);
 }
