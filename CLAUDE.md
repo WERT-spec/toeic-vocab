@@ -27,6 +27,10 @@
 
 **音訊：** 使用瀏覽器內建 Web Speech Synthesis API（無預錄音檔）；語速設為 0.9
 
+## 使用環境
+
+使用者透過 Safari 瀏覽器開啟，並使用「加入主畫面」功能將 App 安裝為 PWA，在桌面像一般 App 一樣使用。`manifest.json` 與三個 icon 檔案（icon-180.png、icon-192.png、icon-512.png）為必要檔案，請勿刪除。
+
 ## 新增單字資料
 
 若要新增天次，請依照現有格式擴充 [js/vocab.js](js/vocab.js) 中的匯出物件：
