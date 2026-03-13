@@ -1,0 +1,227 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+body { font-family: 'Inter', 'PingFang TC', 'Microsoft JhengHei', sans-serif; }
+.card-flip { perspective: 1000px; }
+.card-inner { transition: transform 0.6s; transform-style: preserve-3d; cursor: pointer; }
+.card-inner.flipped { transform: rotateY(180deg); }
+.card-front, .card-back { backface-visibility: hidden; position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.card-back { transform: rotateY(180deg); }
+input:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 4px #bfdbfe; }
+.active-day { background-color: #2563eb !important; color: white !important; border-color: #2563eb !important; }
+/* 語音播放時的視覺回饋 */
+.is-speaking { color: #3b82f6 !important; transform: scale(1.1); transition: all 0.2s ease; }
+
+/* ===== 拼字填空 Letter Tiles ===== */
+#typing-tiles { perspective: 600px; }
+.letter-tile {
+    min-width: 36px; width: 40px; height: 50px;
+    border: 1.5px solid #e2e8f0; border-bottom: 3px solid #94a3b8; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 800; color: #64748b;
+    background: #f8fafc;
+    transition: border-color 0.2s, background 0.2s, color 0.2s;
+    user-select: none;
+}
+.letter-tile.tile-filled  { border-color: #93c5fd; border-bottom-color: #3b82f6; color: #1e40af; background: #eff6ff; }
+.letter-tile.tile-correct { border: 2px solid #22c55e; border-radius: 8px; background: #dcfce7; color: #15803d; animation: tileReveal 0.4s ease both; }
+.letter-tile.tile-wrong   { border: 2px solid #ef4444; border-radius: 8px; background: #fee2e2; color: #b91c1c; animation: tileReveal 0.4s ease both; }
+.letter-tile.tile-hint    { border-color: #fcd34d; border-bottom-color: #f59e0b; color: #b45309; background: #fef3c7; }
+.letter-tile.tile-space   { border: none; background: none; min-width: 10px; width: 10px; }
+@keyframes tileReveal {
+    0%  { transform: rotateX(0deg); }
+    40% { transform: rotateX(-90deg); }
+    100%{ transform: rotateX(0deg); }
+}
+html.dark .letter-tile          { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.08); border-bottom-color: #475569; color: #94a3b8; }
+html.dark .letter-tile.tile-filled  { border-color: rgba(59,130,246,0.35); border-bottom-color: #3b82f6; background: rgba(30,58,95,0.5); color: #93c5fd; }
+html.dark .letter-tile.tile-correct { border-color: #22c55e; background: #052e16; color: #86efac; }
+html.dark .letter-tile.tile-wrong   { border-color: #ef4444; background: #3b0f0f; color: #fca5a5; }
+html.dark .letter-tile.tile-hint    { border-color: rgba(251,191,36,0.4); border-bottom-color: #f59e0b; background: #451a03; color: #fcd34d; }
+
+/* ===== 模式方形按鈕 ===== */
+.mode-square-btn div { background: #e2e8f0; color: #94a3b8; }
+.mode-square-btn span { color: #94a3b8; }
+.mode-square-btn.active div {
+    background: linear-gradient(135deg, #1e40af, #3b82f6);
+    color: white;
+    box-shadow: 0 2px 8px rgba(37,99,235,0.35);
+}
+.mode-square-btn.active span { color: #2563eb; }
+.mode-square-btn div { transition: background 0.2s, box-shadow 0.2s; }
+html.dark .mode-square-btn div { background: #334155; color: #64748b; }
+html.dark .mode-square-btn span { color: #64748b; }
+html.dark .mode-square-btn.active div { background: linear-gradient(135deg, #1e40af, #3b82f6); color: white; }
+html.dark .mode-square-btn.active span { color: #60a5fa; }
+
+/* ===== 模式圓形按鈕 ===== */
+.mode-circle-btn div { background: #e2e8f0; color: #94a3b8; }
+.mode-circle-btn span { color: #94a3b8; }
+.mode-circle-btn.active div {
+    background: linear-gradient(135deg, #1e40af, #3b82f6);
+    color: white;
+    box-shadow: 0 4px 14px rgba(37,99,235,0.45);
+}
+.mode-circle-btn.active span { color: #2563eb; }
+.mode-circle-btn div { transition: background 0.2s, box-shadow 0.2s; }
+html.dark .mode-circle-btn div { background: #334155; color: #64748b; }
+html.dark .mode-circle-btn span { color: #64748b; }
+html.dark .mode-circle-btn.active div { background: linear-gradient(135deg, #1e40af, #3b82f6); color: white; }
+html.dark .mode-circle-btn.active span { color: #60a5fa; }
+
+/* ===== Logo ===== */
+#app-logo {
+    transition: transform 0.3s ease, filter 0.3s ease;
+    filter: drop-shadow(0 4px 12px rgba(37,99,235,0.35));
+}
+#app-logo:hover { transform: scale(1.08) rotate(-3deg); filter: drop-shadow(0 6px 18px rgba(37,99,235,0.5)); }
+
+/* ===== 頁面美化 ===== */
+
+/* 頁面漸層背景 */
+body {
+    background: linear-gradient(160deg, #eff6ff 0%, #f8fafc 50%, #f0fdf4 100%) !important;
+    background-attachment: fixed;
+}
+
+/* 標題漸層文字 */
+#app-title {
+    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+
+/* 容器增強陰影 */
+.rounded-xl { box-shadow: 0 1px 3px rgba(15,23,42,0.04), 0 6px 20px rgba(15,23,42,0.07) !important; }
+.rounded-2xl { box-shadow: 0 2px 8px rgba(15,23,42,0.06), 0 12px 32px rgba(15,23,42,0.09) !important; }
+
+/* 分頁按鈕漸層 */
+#tab-list.bg-blue-600,
+#tab-cards.bg-blue-600,
+#tab-quiz.bg-blue-600 {
+    background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%) !important;
+    box-shadow: 0 3px 10px rgba(37,99,235,0.35) !important;
+}
+
+/* 單字列表列懸停效果 */
+#vocab-table-body tr { transition: all 0.15s ease; border-left: 3px solid transparent; }
+#vocab-table-body tr:hover {
+    background: linear-gradient(90deg, #eff6ff, #f8fafc) !important;
+    border-left-color: #3b82f6;
+}
+
+/* 翻卡正面漸層 */
+.card-front { background: linear-gradient(160deg, #ffffff 0%, #eff6ff 100%) !important; }
+
+/* 翻卡背面漸層 */
+.card-back { background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; }
+
+/* 結果分數漸層文字 */
+#result-score-display {
+    background: linear-gradient(135deg, #1e40af, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* 大按鈕懸停提升動畫 */
+button.bg-blue-600:not(#dark-mode-btn) { transition: all 0.2s ease !important; }
+button.bg-blue-600:not(#dark-mode-btn):hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(37,99,235,0.4) !important;
+}
+button.bg-blue-600:not(#dark-mode-btn):active { transform: translateY(0) !important; }
+
+/* ===== 深色模式 ===== */
+html.dark { color-scheme: dark; }
+html.dark body { background-color: #0f172a; }
+
+/* 背景色 */
+html.dark .bg-white { background-color: #1e293b !important; }
+html.dark .bg-slate-50 { background-color: #0f172a !important; }
+html.dark .bg-slate-100 { background-color: #334155 !important; }
+html.dark .bg-slate-200 { background-color: #1e293b !important; }
+
+/* 文字色 */
+html.dark .text-slate-800 { color: #f1f5f9 !important; }
+html.dark .text-slate-700 { color: #e2e8f0 !important; }
+html.dark .text-slate-600 { color: #cbd5e1 !important; }
+html.dark .text-slate-500 { color: #94a3b8 !important; }
+html.dark .text-slate-400 { color: #64748b !important; }
+html.dark .text-slate-300 { color: #475569 !important; }
+
+/* 邊框色 */
+html.dark .border-slate-100 { border-color: #334155 !important; }
+html.dark .border-slate-200 { border-color: #475569 !important; }
+
+/* Hover 狀態 */
+html.dark .hover\:bg-slate-50:hover { background-color: #1e293b !important; }
+html.dark .hover\:bg-slate-100:hover { background-color: #334155 !important; }
+html.dark tr.hover\:bg-slate-50:hover,
+html.dark tr:hover { background-color: #1e293b !important; }
+
+/* 輸入框 */
+html.dark input[type="text"] {
+    background-color: #1e293b !important;
+    border-color: #475569 !important;
+    color: #f1f5f9 !important;
+}
+html.dark input[type="text"]::placeholder { color: #64748b !important; }
+html.dark input[type="text"]:focus { border-color: #3b82f6 !important; box-shadow: 0 0 0 4px #1e3a5f !important; }
+
+/* 選擇題按鈕 */
+html.dark .mcq-btn {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+    color: #e2e8f0 !important;
+}
+html.dark .mcq-btn:hover { border-color: #3b82f6 !important; background-color: #1e3a5f !important; }
+
+/* 答題後回饋顏色（深色模式）*/
+html.dark .mcq-btn.bg-red-50 {
+    background-color: #3b0f0f !important;
+    border-color: #ef4444 !important;
+    color: #fca5a5 !important;
+}
+html.dark .mcq-btn.bg-green-50 {
+    background-color: #052e16 !important;
+    border-color: #22c55e !important;
+    color: #86efac !important;
+}
+html.dark .mcq-btn.text-red-700 { color: #fca5a5 !important; }
+html.dark .mcq-btn.text-green-700 { color: #86efac !important; }
+
+/* 範圍選擇按鈕 */
+html.dark .range-btn-card,
+html.dark .range-btn-quiz {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+    color: #94a3b8 !important;
+}
+
+/* 深色模式切換按鈕本身 */
+html.dark #dark-mode-btn {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+}
+html.dark #dark-mode-btn:hover { background-color: #334155 !important; }
+
+/* 深色模式覆寫美化樣式 */
+html.dark body { background: #0f172a !important; }
+html.dark #app-title {
+    background: linear-gradient(135deg, #60a5fa 0%, #93c5fd 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+html.dark #vocab-table-body tr:hover {
+    background: linear-gradient(90deg, #1e3a5f, #1e293b) !important;
+    border-left-color: #3b82f6;
+}
+html.dark .card-front { background: linear-gradient(160deg, #1e293b 0%, #1e3a5f 100%) !important; }
+html.dark #result-score-display {
+    background: linear-gradient(135deg, #60a5fa, #93c5fd);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
