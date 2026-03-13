@@ -204,12 +204,11 @@ html.dark .btn-tinted { background: rgba(99,102,241,0.12); color: #a5b4fc; }
 /* ===== BOTTOM NAV ===== */
 #bottom-nav {
     flex-shrink: 0;
-    height: calc(72px + env(safe-area-inset-bottom, 0px));
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-around;
-    padding-top: 0;
-    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-top: 10px;
+    padding-bottom: max(env(safe-area-inset-bottom, 0px), 16px);
     background: rgba(248,250,252,0.97);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
