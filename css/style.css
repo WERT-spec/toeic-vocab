@@ -297,3 +297,9 @@ input, textarea {
 .pt-safe {
     padding-top: env(safe-area-inset-top, 20px);
 }
+
+
+/* 確保按鈕點擊無延遲 */
+button, a, .nav-btn {
+    touch-action: manipulation;
+}
