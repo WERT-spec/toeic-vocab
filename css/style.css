@@ -208,7 +208,7 @@ html.dark .btn-tinted { background: rgba(99,102,241,0.12); color: #a5b4fc; }
     align-items: flex-start;
     justify-content: space-around;
     padding-top: 10px;
-    padding-bottom: max(env(safe-area-inset-bottom, 0px), 16px);
+    padding-bottom: env(safe-area-inset-bottom, 34px);
     background: rgba(248,250,252,0.97);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
