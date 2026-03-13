@@ -75,12 +75,11 @@ html.dark #phone-wrap { background: #0f172a; }
 .app-nav-bar {
     flex-shrink: 0;
     /* 頂部 safe area（iPhone 瀏海/動態島） */
-    padding-top: env(safe-area-inset-top, 0px);
     height: calc(52px + env(safe-area-inset-top, 0px));
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 12px;
+    padding: env(safe-area-inset-top, 0px) 12px 0;
     background: rgba(248,250,252,0.9);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
