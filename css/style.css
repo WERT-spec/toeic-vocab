@@ -44,18 +44,18 @@ button, a { touch-action: manipulation; }
 
 /* ===== MOBILE-FIRST LAYOUT ===== */
 html, body {
+    margin: 0;
+    padding: 0;
     height: 100%;
+    overflow: hidden;
     background: var(--bg);
 }
 
 #phone-wrap {
-    width: 100%;
+    position: fixed;
+    inset: 0;
     max-width: 480px;
     margin: 0 auto;
-    /* svh = Small Viewport Height，Safari PWA 中等於真實螢幕高度 */
-    height: 100svh;
-    /* 舊版 Safari fallback */
-    height: -webkit-fill-available;
     background: var(--bg);
     display: flex;
     flex-direction: column;

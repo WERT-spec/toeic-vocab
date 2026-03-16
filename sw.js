@@ -3,7 +3,7 @@
 // DATA_CACHE:  單字資料（vocab.js）—— network-first，有網路時更新，無網路用快取
 // CDN_CACHE:   外部 CDN 資源 —— stale-while-revalidate
 
-const SHELL_VERSION = 'v3';
+const SHELL_VERSION = 'v4';
 const SHELL_CACHE = `toeic-shell-${SHELL_VERSION}`;
 const DATA_CACHE  = 'toeic-data-v1';
 const CDN_CACHE   = 'toeic-cdn-v1';
@@ -49,7 +49,8 @@ self.addEventListener('install', event => {
       ),
     ])
   );
-  // 不自動 skipWaiting — 等用戶點「立即更新」後才切換
+  // 強制接管：確保新版 SW 立即啟用，清除舊快取
+  self.skipWaiting();
 });
 
 // ===== ACTIVATE: 清除舊版快取 =====
