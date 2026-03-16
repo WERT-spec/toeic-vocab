@@ -20,7 +20,6 @@ function applyUpdate() {
 
 const SCREENS = ['home', 'study', 'quiz', 'stats'];
 const SCREEN_ORDER = { home: 0, study: 1, quiz: 2, stats: 3 };
-const SCREEN_RENDERERS = { home: renderHomeScreen, study: renderStudyScreen, quiz: renderQuizSetup, stats: renderStatsScreen };
 
 function switchScreen(name) {
     const prev = state.activeScreen;
@@ -39,7 +38,10 @@ function switchScreen(name) {
 
     document.getElementById('tab-' + name)?.classList.add('tab-btn-active');
     state.activeScreen = name;
-    SCREEN_RENDERERS[name]?.();
+    if (name === 'home')  renderHomeScreen();
+    if (name === 'study') renderStudyScreen();
+    if (name === 'quiz')  renderQuizSetup();
+    if (name === 'stats') renderStatsScreen();
     savePrefs();
 }
 
