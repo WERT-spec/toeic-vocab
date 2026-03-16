@@ -373,6 +373,8 @@ html.dark .seg-btn-active { background: #3a3a3c !important; color: #9b96e8 !impo
 .seg-btn:active { transform: scale(0.95); }
 
 /* ===== FLASHCARD ===== */
+#card-word { color: #000000 !important; }
+html.dark #card-word { color: #e5e5ea !important; }
 .card-flip { perspective: 1000px; }
 .card-inner { transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; cursor: pointer; }
 .card-inner.flipped { transform: rotateY(180deg); }
