@@ -68,15 +68,20 @@ function renderHomeScreen() {
 
         if (hasData) {
             html += `
-            <button onclick="selectDay('${dayKey}')" style="--i: ${i}" class="day-cell has-data relative flex flex-col items-center py-3 rounded-2xl border ${isSelected ? 'is-selected border-indigo-500 bg-indigo-50 dark:bg-indigo-900/30' : 'border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-800/50'} transition-all hover:scale-105 active:scale-95 shadow-sm">
-                <svg width="32" height="32" viewBox="0 0 28 28" class="mb-1">
-                    <circle cx="14" cy="14" r="12" fill="none" stroke="${isSelected ? 'rgba(99, 102, 241, 0.2)' : 'rgba(0,0,0,0.05)'}" stroke-width="3"/>
-                    ${bestScore > 0 ? `<circle cx="14" cy="14" r="12" fill="none" stroke="${isHigh ? '#22c55e' : '#6366f1'}" stroke-width="3" stroke-dasharray="${circumference}" stroke-dashoffset="${dashOffset}" class="progress-ring-circle" stroke-linecap="round"/>` : ''}
+            <button onclick="selectDay('${dayKey}')" style="--i: ${i}" class="day-cell has-data relative flex flex-col items-center justify-center py-4 rounded-2xl border ${isSelected ? 'is-selected border-violet-500 bg-violet-50' : 'border-slate-200 bg-white'} transition-all hover:scale-105 active:scale-95 shadow-sm">
+                <svg width="28" height="28" viewBox="0 0 28 28" class="mb-1.5">
+                    <circle cx="14" cy="14" r="11" stroke-width="2" class="${isSelected ? 'day-ring-sel' : 'day-ring'}"/>
+                    ${isSelected
+                        ? `<circle cx="14" cy="14" r="4.5" class="day-dot-sel"/>`
+                        : (bestScore > 0 ? `<circle cx="14" cy="14" r="4" fill="${isHigh ? '#22c55e' : '#818cf8'}" opacity="0.6"/>` : '')}
                 </svg>
-                <span class="text-[11px] font-black ${isSelected ? 'text-indigo-600 dark:text-indigo-300' : 'text-slate-500 dark:text-slate-400'}">D${i}</span>
+                <span class="text-[11px] font-black ${isSelected ? 'text-violet-600 dark:text-violet-300' : 'text-slate-500 dark:text-slate-400'}">D${i}</span>
             </button>`;
         } else {
-            html += `<div class="day-cell flex flex-col items-center py-2.5 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 opacity-40" style="--i: ${i}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="text-[10px] font-bold text-slate-300 mt-1">D${i}</span></div>`;
+            html += `<div class="day-cell flex flex-col items-center justify-center py-4 rounded-2xl border border-slate-100 bg-slate-50 opacity-40" style="--i: ${i}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-1.5 text-slate-400"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <span class="text-[10px] font-bold text-slate-400">D${i}</span>
+            </div>`;
         }
     }
     grid.innerHTML = html;

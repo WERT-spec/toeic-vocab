@@ -309,6 +309,29 @@ html.dark .tab-btn-active::after { background: #9fa8da; box-shadow: 0 0 6px #9fa
 .day-cell { transition: all 0.18s ease; }
 .day-cell.has-data:active { transform: scale(0.88); opacity: 0.8; }
 
+/* Dark mode cell overrides */
+html.dark .day-cell.has-data {
+    background: #17172a !important;
+    border-color: rgba(255,255,255,0.06) !important;
+    box-shadow: none !important;
+}
+html.dark .day-cell.has-data.is-selected {
+    background: rgba(109,40,217,0.12) !important;
+    border-color: #8b5cf6 !important;
+    box-shadow: 0 0 0 1.5px rgba(139,92,246,0.4), 0 0 24px rgba(139,92,246,0.18) !important;
+}
+html.dark .day-cell:not(.has-data) {
+    background: #13131f !important;
+    border-color: rgba(255,255,255,0.04) !important;
+}
+html.dark .day-cell:not(.has-data) svg { color: rgba(255,255,255,0.2); }
+
+/* Day grid icon classes */
+.day-ring { stroke: #cbd5e1; fill: none; }
+html.dark .day-ring { stroke: rgba(255,255,255,0.18); }
+.day-ring-sel { stroke: #8b5cf6; fill: none; }
+.day-dot-sel { fill: #8b5cf6; }
+
 .progress-ring-circle {
     transition: stroke-dashoffset 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     transform: rotate(-90deg);
