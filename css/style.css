@@ -125,11 +125,15 @@ button, a { touch-action: manipulation; }
 /* ===== APP NAV BAR ===== */
 .app-nav-bar {
     flex-shrink: 0;
+    height: 52px;
     height: calc(52px + env(safe-area-inset-top, 0px));
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: env(safe-area-inset-top, 0px) 16px 0;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: 0;
+    padding-left: 16px;
+    padding-right: 16px;
     background: rgba(245,245,247,0.88);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
@@ -142,7 +146,10 @@ html.dark .app-nav-bar {
     border-bottom-color: rgba(255,255,255,0.06);
 }
 .app-nav-title {
-    position: absolute; left: 50%; transform: translateX(-50%);
+    position: absolute; 
+    left: 50%; 
+    bottom: 26px; 
+    transform: translate(-50%, 50%);
     font-size: 15px; font-weight: 700;
     color: #1d1d1f; letter-spacing: -0.2px;
     white-space: nowrap;
@@ -169,6 +176,7 @@ html.dark .app-nav-title { color: #e5e5ea; }
     background: rgba(59,130,246,0.07);
     border: none; cursor: pointer;
     transition: background 0.15s, opacity 0.15s;
+    margin-left: auto;
 }
 html.dark .nav-icon-btn { background: rgba(255,255,255,0.07); }
 .nav-icon-btn:active { opacity: 0.6; }
