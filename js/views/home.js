@@ -95,12 +95,6 @@ function selectDay(dayKey) {
         el.classList.add('border-slate-200', 'dark:border-slate-700', 'bg-white', 'dark:bg-slate-800');
     });
     
-    // Show CTA
-    const cta = document.getElementById('home-start-cta');
-    if (cta) {
-        cta.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
-    }
-
     renderHomeScreen();
     savePrefs();
 }
