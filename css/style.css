@@ -219,48 +219,36 @@ html.dark .btn-tinted { color: #9fa8da; }
 /* ===== BOTTOM NAV ===== */
 #bottom-nav {
     position: fixed;
-    left: 0; right: 0; bottom: 0;
-    max-width: 480px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    padding-bottom: max(env(safe-area-inset-bottom), 12px);
-    padding-left: 16px;
-    padding-right: 16px;
-    pointer-events: none;
-    z-index: 100;
-}
-
-/* 浮島容器 */
-#bottom-nav::before {
-    content: '';
-    position: absolute;
-    bottom: max(env(safe-area-inset-bottom), 12px);
     left: 24px; right: 24px;
+    bottom: max(env(safe-area-inset-bottom), 16px);
+    max-width: calc(480px - 48px);
+    margin: 0 auto;
     height: 64px;
-    background: rgba(255, 255, 255, 0.82);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(32px);
     -webkit-backdrop-filter: blur(32px);
     border-radius: 28px;
     border: 1px solid rgba(255,255,255,0.9);
-    box-shadow: 0 8px 32px rgba(92,107,192,0.13), 0 2px 8px rgba(92,107,192,0.08);
+    box-shadow: 0 8px 32px rgba(92,107,192,0.15), 0 2px 8px rgba(92,107,192,0.08);
+    z-index: 100;
 }
-html.dark #bottom-nav::before {
-    background: rgba(22, 22, 31, 0.88);
-    border-color: rgba(255,255,255,0.07);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.3);
+html.dark #bottom-nav {
+    background: rgba(22, 22, 31, 0.92);
+    border-color: rgba(255,255,255,0.08);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.3);
 }
 
 .tab-btn {
-    pointer-events: auto;
     flex: 1;
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
     gap: 3px;
     border: none; background: transparent; cursor: pointer;
     color: #b0b8d8;
-    height: 64px;
+    height: 100%;
     position: relative;
     padding: 0;
     transition: color 0.2s ease, transform 0.15s ease;
@@ -274,7 +262,7 @@ html.dark .tab-btn { color: #4a4a6a; }
 }
 html.dark .tab-btn-active { color: #9fa8da !important; }
 
-.tab-btn:active { transform: scale(0.88) translateY(-2px); opacity: 0.7; }
+.tab-btn:active { transform: scale(0.88); opacity: 0.7; }
 
 .tab-icon { width: 24px; height: 24px; transition: transform 0.2s ease; }
 .tab-btn-active .tab-icon { transform: scale(1.1); }
@@ -285,13 +273,13 @@ html.dark .tab-btn-active { color: #9fa8da !important; }
     letter-spacing: 0.04em;
     transition: opacity 0.2s;
 }
-.tab-btn:not(.tab-btn-active) .tab-label { opacity: 0.5; }
+.tab-btn:not(.tab-btn-active) .tab-label { opacity: 0.45; }
 
 /* active 指示點 */
 .tab-btn-active::after {
     content: '';
     position: absolute;
-    bottom: 6px;
+    bottom: 7px;
     width: 4px; height: 4px;
     background: var(--primary);
     border-radius: 50%;
