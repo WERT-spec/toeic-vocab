@@ -218,16 +218,17 @@ html.dark .btn-tinted { color: #9fa8da; }
 /* ===== BOTTOM NAV ===== */
 #bottom-nav {
     flex-shrink: 0;
-    height: calc(72px + env(safe-area-inset-bottom, 0px));
     display: flex;
     align-items: flex-start;
     justify-content: space-around;
     padding-top: 10px;
-    padding-bottom: env(safe-area-inset-bottom, 0px);
+    /* 貼底：用 padding-bottom 吸收 home indicator 高度 */
+    padding-bottom: max(env(safe-area-inset-bottom, 0px), 8px);
     background: rgba(255,255,255,0.97);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     border-top: 1px solid rgba(92,107,192,0.08);
+    /* 不用固定 height，讓 padding 自然撐開 */
 }
 html.dark #bottom-nav {
     background: rgba(16,16,22,0.97);
