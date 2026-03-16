@@ -23,13 +23,17 @@ function updateDashboard() {
     
     if (dashTotal) dashTotal.textContent = totalWords;
     if (dashMastered) dashMastered.textContent = masteredWords;
-    
+    const dashMastered2 = document.getElementById('dash-mastered-count2');
+    if (dashMastered2) dashMastered2.textContent = masteredWords;
+    const dashUnmastered = document.getElementById('dash-unmastered-count');
+    if (dashUnmastered) dashUnmastered.textContent = totalWords - masteredWords;
+
     const percentage = totalWords === 0 ? 0 : Math.round((masteredWords / totalWords) * 100);
     if (dashPct) dashPct.textContent = percentage + '%';
-    
+
     const circle = document.getElementById('dash-progress-circle');
     if (circle) {
-        const circumference = 2 * Math.PI * 16; // r=16
+        const circumference = 2 * Math.PI * 15; // r=15
         circle.style.strokeDasharray = circumference;
         setTimeout(() => {
             circle.style.strokeDashoffset = circumference - (percentage / 100) * circumference;
@@ -45,13 +49,9 @@ function renderHomeScreen() {
     updateDashboard();
 
     // Streak
-    const streakEl = document.getElementById('streak-display');
-    if (streakEl && meta.streakDays > 0) {
-        streakEl.innerHTML = `<span class="streak-emoji">🔥</span> 連續學習 ${meta.streakDays} 天`;
-        streakEl.classList.remove('hidden');
-    } else {
-        if (streakEl) streakEl.classList.add('hidden');
-    }
+    const streakText = document.getElementById('streak-text');
+    const days = meta.streakDays > 0 ? meta.streakDays : 1;
+    if (streakText) streakText.textContent = `連續 ${days} 天`;
 
     // Day grid
     let html = '';

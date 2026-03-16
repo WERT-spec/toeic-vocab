@@ -36,28 +36,42 @@
             </header>
 
             <div class="screen-body">
-                <div id="streak-display" class="streak-banner hidden">🔥 <span id="streak-text"></span></div>
-
-                <!-- Dashboard -->
-                <div class="section-card flex items-center p-5 mb-4 gap-5">
-                    <div class="relative w-20 h-20 shrink-0">
-                        <svg class="w-full h-full -rotate-90 transition-all duration-1000 ease-out" viewBox="0 0 36 36">
-                            <!-- Background Circle -->
-                            <circle cx="18" cy="18" r="16" fill="none" class="stroke-slate-100 dark:stroke-slate-800" stroke-width="4"></circle>
-                            <!-- Progress Circle -->
-                            <circle id="dash-progress-circle" cx="18" cy="18" r="16" fill="none" class="stroke-indigo-500" stroke-width="4" stroke-dasharray="100.5" stroke-dashoffset="100.5" stroke-linecap="round" style="transition: stroke-dashoffset 1s ease-out;"></circle>
-                        </svg>
-                        <div class="absolute inset-0 flex flex-col items-center justify-center">
-                            <span id="dash-percentage" class="text-lg font-black text-slate-800 dark:text-slate-100 leading-none">0%</span>
+                <!-- Dashboard Row -->
+                <div class="flex gap-3 mb-3">
+                    <!-- Progress Card -->
+                    <div class="dash-card dash-card-progress flex-1 flex items-center gap-4 p-4">
+                        <div class="relative shrink-0" style="width:64px;height:64px">
+                            <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
+                                <circle cx="18" cy="18" r="15" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="3.5"></circle>
+                                <circle id="dash-progress-circle" cx="18" cy="18" r="15" fill="none" stroke="url(#dashGrad)" stroke-width="3.5" stroke-dasharray="94.2" stroke-dashoffset="94.2" stroke-linecap="round" style="transition:stroke-dashoffset 1s ease-out;"></circle>
+                                <defs>
+                                    <linearGradient id="dashGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#a78bfa"/>
+                                        <stop offset="100%" stop-color="#7c4dff"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <span id="dash-percentage" class="text-base font-black text-white leading-none">0%</span>
+                            </div>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-1 mb-1">
+                                <span class="text-xs font-black text-white tracking-wide">整體學習進度</span>
+                                <span class="text-sm">✨</span>
+                            </div>
+                            <p class="text-xs text-white/70 mb-2">已掌握 <span id="dash-mastered-count" class="font-black text-white">0</span> / <span id="dash-total-count">0</span> 單字</p>
+                            <div class="flex gap-3">
+                                <div class="flex items-center gap-1"><div class="w-1.5 h-1.5 rounded-full bg-violet-300"></div><span class="text-[10px] text-white/60">已掌握 (<span id="dash-mastered-count2">0</span>)</span></div>
+                                <div class="flex items-center gap-1"><div class="w-1.5 h-1.5 rounded-full bg-white/30"></div><span class="text-[10px] text-white/60">未熟練 (<span id="dash-unmastered-count">0</span>)</span></div>
+                            </div>
                         </div>
                     </div>
-                    <div class="flex-1">
-                        <h3 class="text-sm font-bold text-slate-800 dark:text-slate-100 mb-1">學習總進度</h3>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mb-2">已掌握 <span id="dash-mastered-count" class="font-bold text-indigo-600 dark:text-indigo-400">0</span> / <span id="dash-total-count">0</span> 單字</p>
-                        <div class="flex gap-2">
-                            <div class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-indigo-500"></div><span class="text-[10px] text-slate-500">已掌握</span></div>
-                            <div class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-slate-200 dark:bg-slate-700"></div><span class="text-[10px] text-slate-500">未熟練</span></div>
-                        </div>
+                    <!-- Streak Card -->
+                    <div id="streak-display" class="dash-card dash-card-streak flex flex-col items-center justify-center gap-1 px-4 py-3">
+                        <div class="text-3xl mb-1">🔥</div>
+                        <div class="text-[9px] font-black text-white/60 tracking-widest uppercase">Learning Streak</div>
+                        <div class="text-base font-black text-white leading-tight"><span id="streak-text">連續 1 天</span></div>
                     </div>
                 </div>
 

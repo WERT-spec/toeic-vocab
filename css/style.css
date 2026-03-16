@@ -263,14 +263,22 @@ html.dark .tab-btn-active { color: #9fa8da !important; }
 }
 html.dark .tab-btn-active::after { background: #9fa8da; }
 
-/* ===== STREAK BANNER ===== */
-.streak-banner {
-    background: linear-gradient(135deg, #ff6b6b, #ffa552);
-    color: white; font-weight: 700; font-size: 13px;
-    padding: 10px 16px; border-radius: 14px;
-    margin-bottom: 12px;
-    text-align: center;
-    box-shadow: 0 4px 16px rgba(255,107,107,0.3);
+/* ===== DASHBOARD CARDS ===== */
+.dash-card {
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+}
+.dash-card-progress {
+    background: linear-gradient(135deg, #3d2d6b 0%, #1e1535 100%);
+    border: 1px solid rgba(167,139,250,0.2);
+    box-shadow: 0 4px 24px rgba(92,60,200,0.35);
+}
+.dash-card-streak {
+    background: linear-gradient(135deg, #2d1f3d 0%, #1a1228 100%);
+    border: 1px solid rgba(255,107,107,0.2);
+    box-shadow: 0 4px 24px rgba(180,60,80,0.25);
+    min-width: 100px;
 }
 
 /* ===== DAY GRID ===== */
