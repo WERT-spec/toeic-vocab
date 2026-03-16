@@ -1,6 +1,6 @@
 // ===== APP SHELL SERVICE WORKER =====
 
-const SHELL_VERSION = 'v6';
+const SHELL_VERSION = 'v7';
 const SHELL_CACHE = `toeic-shell-${SHELL_VERSION}`;
 const DATA_CACHE  = 'toeic-data-v1';
 const CDN_CACHE   = 'toeic-cdn-v1';
