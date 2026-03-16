@@ -125,15 +125,11 @@ button, a { touch-action: manipulation; }
 /* ===== APP NAV BAR ===== */
 .app-nav-bar {
     flex-shrink: 0;
-    height: 52px;
     height: calc(52px + env(safe-area-inset-top, 0px));
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-top: env(safe-area-inset-top, 0px);
-    padding-bottom: 0;
-    padding-left: 16px;
-    padding-right: 16px;
+    padding: env(safe-area-inset-top, 0px) 16px 0;
     background: rgba(245,245,247,0.88);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
@@ -148,8 +144,7 @@ html.dark .app-nav-bar {
 .app-nav-title {
     position: absolute; 
     left: 50%; 
-    bottom: 26px; 
-    transform: translate(-50%, 50%);
+    transform: translateX(-50%);
     font-size: 15px; font-weight: 700;
     color: #1d1d1f; letter-spacing: -0.2px;
     white-space: nowrap;

@@ -36,7 +36,7 @@
 使用者透過 Safari 瀏覽器開啟，並使用「加入主畫面」功能將 App 安裝為 PWA，在桌面像一般 App 一樣使用。`manifest.json` 與三個 icon 檔案（icon-180.png、icon-192.png、icon-512.png）為必要檔案，請勿刪除。
 
 **PWA 開發注意事項（iOS / Safari）：**
-- 必須保留 `<meta name="apple-mobile-web-app-capable" content="yes">` 與 `apple-mobile-web-app-status-bar-style` 為 `black-translucent`，這樣 iOS PWA 才會讓 Webview 延伸到頂部狀態列下方，讓應用程式的自訂背景色（如 `.app-nav-bar`）能正確顯示。
+- 現代 iOS (14+) PWA 已不再需要傳統的 `apple-mobile-web-app-capable` 標籤，只需依賴 `manifest.json` 內的 `"display": "standalone"`，並搭配 `<meta name="viewport" content="... viewport-fit=cover">`，系統便會自動將畫面填滿整個螢幕，同時正確計算底部的安全距離 `env(safe-area-inset-bottom)`。
 - 如果使用者反映更新 PWA 後佈局跑掉或頂部出現黑色區塊，這是因為 iOS 會死記住初次「加入主畫面」時的狀態。唯一的解法是**刪除桌面舊的 PWA，然後重新打開 Safari 再次「加入主畫面」**。
 
 ## 新增單字資料

@@ -60,7 +60,7 @@ function syncDarkBtns(isDark) {
     document.querySelectorAll('meta[name="theme-color"]').forEach(m => m.remove());
     const meta = document.createElement('meta');
     meta.name = 'theme-color';
-    meta.content = isDark ? '#0a0a0f' : '#f0f4ff';
+    meta.content = isDark ? '#0f172a' : '#f8fafc';
     document.head.appendChild(meta);
 }
 
