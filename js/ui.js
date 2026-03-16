@@ -40,6 +40,11 @@ function syncDarkBtns(isDark) {
         const el = document.getElementById(id);
         if (el) el.textContent = isDark ? '☀️' : '🌙';
     });
+    document.querySelectorAll('meta[name="theme-color"]').forEach(m => m.remove());
+    const meta = document.createElement('meta');
+    meta.name = 'theme-color';
+    meta.content = isDark ? '#0a0a0f' : '#f0f4ff';
+    document.head.appendChild(meta);
 }
 
 function toggleDarkMode() {
