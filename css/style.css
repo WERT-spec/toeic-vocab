@@ -43,17 +43,19 @@ input, textarea { user-select: auto; -webkit-user-select: auto; }
 button, a { touch-action: manipulation; }
 
 /* ===== MOBILE-FIRST LAYOUT ===== */
+html {
+    height: 100%;
+    height: -webkit-fill-available;
+}
 body {
     background: var(--bg);
-    min-height: 100dvh;
-    min-height: -webkit-fill-available;
+    height: 100%;
+    height: -webkit-fill-available;
 }
 
 #phone-wrap {
     position: fixed;
-    top: 0; left: 0; right: 0;
-    height: 100dvh;
-    height: -webkit-fill-available;
+    top: 0; left: 0; right: 0; bottom: 0;
     max-width: 480px;
     margin: 0 auto;
     background: var(--bg);
