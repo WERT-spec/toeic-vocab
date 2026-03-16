@@ -1,91 +1,89 @@
-// ===== QUIZ SETUP =====
+// ===== QUIZ =====
+
+const QUIZ_PANELS = ['quiz-setup', 'quiz-active', 'quiz-results'];
+
+function showQuizPanel(panel) {
+    QUIZ_PANELS.forEach(id => document.getElementById(id).classList.toggle('hidden', id !== panel));
+}
+
+function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+// ===== SETUP =====
 
 function renderQuizSetup() {
-    document.getElementById('quiz-setup').classList.remove('hidden');
-    document.getElementById('quiz-active').classList.add('hidden');
-    document.getElementById('quiz-results').classList.add('hidden');
+    showQuizPanel('quiz-setup');
     state.quiz.phase = 'setup';
+    Debug.quiz('setup', state.dayKey);
 
-    const num = state.dayKey.replace('Day ', '');
-    document.getElementById('quiz-setup-day-label').textContent = `DAY ${num}`;
-
+    document.getElementById('quiz-setup-day-label').textContent = `DAY ${state.dayKey.replace('Day ', '')}`;
     renderRangePills('quiz-range-pills', state.range, 'setRange');
     selectQuizMode(state.quiz.mode);
 
-    // Show last score
-    const progress = loadProgress();
-    const prog = progress[state.dayKey] || {};
-    const lastScoreEl = document.getElementById('quiz-last-score');
+    const prog = loadProgress()[state.dayKey] || {};
+    const el = document.getElementById('quiz-last-score');
     if (prog.quizBestScore) {
-        lastScoreEl.textContent = `上次最佳：${prog.quizBestScore} 分（共 ${prog.quizAttempts} 次測驗）`;
-        lastScoreEl.classList.remove('hidden');
+        el.textContent = `上次最佳：${prog.quizBestScore} 分（共 ${prog.quizAttempts} 次測驗）`;
+        el.classList.remove('hidden');
     } else {
-        lastScoreEl.classList.add('hidden');
+        el.classList.add('hidden');
     }
 }
 
 function selectQuizMode(mode) {
     state.quiz.mode = mode;
-    ['en-zh', 'zh-en-type'].forEach(m => {
-        const card = document.getElementById('mode-card-' + m);
-        if (!card) return;
-        card.classList.remove('quiz-mode-card-selected');
-    });
-    const selected = document.getElementById('mode-card-' + mode);
-    if (selected) {
-        selected.classList.add('quiz-mode-card-selected');
-    }
+    Debug.quiz('mode', mode);
+    document.querySelectorAll('.quiz-mode-card').forEach(c => c.classList.remove('quiz-mode-card-selected'));
+    document.getElementById('mode-card-' + mode)?.classList.add('quiz-mode-card-selected');
 }
 
 function startQuizFromSetup() {
-    document.getElementById('quiz-setup').classList.add('hidden');
-    document.getElementById('quiz-active').classList.remove('hidden');
-    document.getElementById('quiz-results').classList.add('hidden');
+    showQuizPanel('quiz-active');
     state.quiz.phase = 'active';
     resetQuiz();
 }
 
 function abandonQuiz() {
-    if (state.quiz.currentIdx === 0 && !state.quiz.isAnswered) {
-        renderQuizSetup(); return;
-    }
+    if (state.quiz.currentIdx === 0 && !state.quiz.isAnswered) { renderQuizSetup(); return; }
     showResults();
 }
 
 // ===== QUIZ LOGIC =====
 
 function resetQuiz() {
-    state.quiz.score      = 0;
-    state.quiz.currentIdx = 0;
-    state.quiz.log        = [];
-
-    const subList = getSubList(state.range);
-    for (let i = subList.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [subList[i], subList[j]] = [subList[j], subList[i]];
-    }
-    state.quiz.activeList  = subList;
-    state.quiz.total       = subList.length;
-    state.quiz.allMeanings = vocabData[state.dayKey].map(x => x.m);
-
+    Object.assign(state.quiz, { score: 0, currentIdx: 0, log: [] });
+    const subList = shuffle(getSubList(state.range));
+    Object.assign(state.quiz, {
+        activeList: subList,
+        total: subList.length,
+        allMeanings: vocabData[state.dayKey].map(x => x.m),
+    });
+    Debug.quiz('reset', subList.length, 'words');
     startQuiz();
 }
 
 function startQuiz() {
-    if (state.quiz.currentIdx >= state.quiz.total) { showResults(); return; }
-    state.quiz.isAnswered = false;
-    state.quiz.targetWord = state.quiz.activeList[state.quiz.currentIdx];
+    const { quiz } = state;
+    if (quiz.currentIdx >= quiz.total) { showResults(); return; }
+
+    quiz.isAnswered = false;
+    quiz.targetWord = quiz.activeList[quiz.currentIdx];
+    Debug.quiz('question', quiz.currentIdx + 1, quiz.targetWord.w);
 
     document.getElementById('next-quiz-btn').classList.add('hidden');
     document.getElementById('quiz-feedback').classList.add('hidden');
 
-    const progress = (state.quiz.currentIdx / state.quiz.total) * 100;
-    document.getElementById('quiz-progress-fill').style.width = progress + '%';
-    document.getElementById('quiz-progress-text').textContent = `第 ${state.quiz.currentIdx + 1} / ${state.quiz.total} 題`;
-    document.getElementById('quiz-score-display').textContent = `${Math.round(state.quiz.score)} 分`;
+    const pct = (quiz.currentIdx / quiz.total) * 100;
+    document.getElementById('quiz-progress-fill').style.width = pct + '%';
+    document.getElementById('quiz-progress-text').textContent = `第 ${quiz.currentIdx + 1} / ${quiz.total} 題`;
+    document.getElementById('quiz-score-display').textContent = `${Math.round(quiz.score)} 分`;
 
-    if (state.quiz.mode === 'en-zh') setupMCQ();
-    else setupTyping();
+    quiz.mode === 'en-zh' ? setupMCQ() : setupTyping();
 }
 
 function setupMCQ() {
@@ -94,13 +92,13 @@ function setupMCQ() {
     document.getElementById('quiz-audio-btn').classList.remove('hidden');
     document.getElementById('quiz-question').innerHTML = `<span class="text-indigo-600 dark:text-indigo-400 text-3xl font-black tracking-tight w-full text-center block">${state.quiz.targetWord.w}</span>`;
 
-    let options = [state.quiz.targetWord.m];
-    const allMeanings = state.quiz.allMeanings;
+    const correct = state.quiz.targetWord.m;
+    const options = [correct];
     while (options.length < 4) {
-        const rand = allMeanings[Math.floor(Math.random() * allMeanings.length)];
-        if (!options.includes(rand)) options.push(rand);
+        const r = state.quiz.allMeanings[Math.floor(Math.random() * state.quiz.allMeanings.length)];
+        if (!options.includes(r)) options.push(r);
     }
-    options.sort(() => Math.random() - 0.5);
+    shuffle(options);
 
     document.getElementById('quiz-options').innerHTML = options.map(opt => `
         <button data-answer="${opt.replace(/"/g, '&quot;')}" onclick="checkMCQAnswer(this)"
@@ -112,15 +110,17 @@ function setupTyping() {
     document.getElementById('quiz-options').classList.add('hidden');
     document.getElementById('quiz-typing').classList.remove('hidden');
     document.getElementById('quiz-audio-btn').classList.add('hidden');
-    document.getElementById('quiz-question').innerHTML = `<div><p class="text-4xl font-black text-slate-800 dark:text-slate-100 leading-tight mb-1">${state.quiz.targetWord.m}</p><p class="text-sm text-slate-500 font-medium">${state.quiz.targetWord.p}</p></div>`;
+
+    const { targetWord } = state.quiz;
+    document.getElementById('quiz-question').innerHTML = `<div><p class="text-4xl font-black text-slate-800 dark:text-slate-100 leading-tight mb-1">${targetWord.m}</p><p class="text-sm text-slate-500 font-medium">${targetWord.p}</p></div>`;
 
     state.quiz.revealedPositions = [];
     state.quiz.hintPenalty = 0;
 
     const input = document.getElementById('typing-input');
     input.value = ''; input.disabled = false; input.focus();
-    input.oninput  = () => renderTiles(input.value, false);
-    input.onkeydown = (e) => { if (e.key === 'Enter') checkTypingAnswer(); };
+    input.oninput = () => renderTiles(input.value, false);
+    input.onkeydown = e => { if (e.key === 'Enter') checkTypingAnswer(); };
 
     const hintBtn = document.getElementById('hint-btn');
     hintBtn.disabled = false;
@@ -130,23 +130,19 @@ function setupTyping() {
 }
 
 function renderTiles(typed, submitted) {
-    const word  = state.quiz.targetWord.w;
-    const tiles = document.getElementById('typing-tiles');
-    tiles.innerHTML = word.split('').map((char, i) => {
+    document.getElementById('typing-tiles').innerHTML = state.quiz.targetWord.w.split('').map((char, i) => {
         if (char === ' ') return `<div class="letter-tile tile-space"></div>`;
-        const typedChar = typed[i] || '';
-        const isHinted  = state.quiz.revealedPositions.includes(i);
+        const tc = typed[i] || '';
+        const isHinted = state.quiz.revealedPositions.includes(i);
+
         let cls = 'letter-tile', display = '';
         if (submitted) {
-            const ok = normalize(typedChar) === normalize(char);
-            cls += ok ? ' tile-correct' : ' tile-wrong';
-            display = typedChar ? typedChar.toUpperCase() : '?';
+            cls += normalize(tc) === normalize(char) ? ' tile-correct' : ' tile-wrong';
+            display = tc ? tc.toUpperCase() : '?';
         } else if (isHinted) {
-            cls += ' tile-hint';
-            display = char.toUpperCase();
-        } else if (typedChar) {
-            cls += ' tile-filled';
-            display = typedChar.toUpperCase();
+            cls += ' tile-hint'; display = char.toUpperCase();
+        } else if (tc) {
+            cls += ' tile-filled'; display = tc.toUpperCase();
         }
         return `<div class="${cls}" style="animation-delay:${submitted ? i * 60 : 0}ms">${display}</div>`;
     }).join('');
@@ -158,10 +154,13 @@ function giveHint() {
         if (c !== ' ' && !state.quiz.revealedPositions.includes(i)) acc.push(i);
         return acc;
     }, []);
-    if (unrevealed.length === 0) return;
+    if (!unrevealed.length) return;
+
     state.quiz.revealedPositions.push(unrevealed[0]);
     state.quiz.hintPenalty += 5;
+    Debug.quiz('hint', unrevealed.length - 1, 'remaining');
     renderTiles(document.getElementById('typing-input').value, false);
+
     if (unrevealed.length <= 1) {
         const btn = document.getElementById('hint-btn');
         btn.disabled = true;
@@ -169,17 +168,25 @@ function giveHint() {
     }
 }
 
+// ===== ANSWER CHECKING =====
+
 function checkMCQAnswer(btn) {
     if (state.quiz.isAnswered) return;
     state.quiz.isAnswered = true;
+
     const selected = btn.dataset.answer;
-    const correct  = state.quiz.targetWord.m;
+    const correct = state.quiz.targetWord.m;
     const isCorrect = selected === correct;
+    const points = isCorrect ? (100 / state.quiz.total) : 0;
+
+    Debug.quiz('mcq', isCorrect ? '✓' : '✗', state.quiz.targetWord.w);
+
     document.querySelectorAll('.mcq-btn').forEach(b => b.disabled = true);
+
     if (isCorrect) {
         btn.classList.replace('border-slate-100', 'border-green-500');
         btn.classList.add('bg-green-50', 'text-green-700', 'animate-pop');
-        state.quiz.score += (100 / state.quiz.total);
+        state.quiz.score += points;
     } else {
         btn.classList.replace('border-slate-100', 'border-red-500');
         btn.classList.add('bg-red-50', 'text-red-700', 'animate-shake');
@@ -190,21 +197,9 @@ function checkMCQAnswer(btn) {
             }
         });
     }
-    state.quiz.log.push({ word: state.quiz.targetWord, isCorrect, userAnswer: selected, pointsEarned: isCorrect ? (100 / state.quiz.total) : 0 });
-    finishQuestion();
-}
 
-function showTypingFeedback(isCorrect, word) {
-    const feedback = document.getElementById('quiz-feedback');
-    feedback.classList.remove('hidden');
-    const info = `<span class="text-xs text-slate-500 italic mt-1 inline-block">(${word.p}) ${word.ph}</span>`;
-    if (isCorrect) {
-        feedback.innerHTML = `✅ 答對了！<br>單字：<span class="font-bold text-lg">${word.w}</span><br>${info}`;
-        feedback.className = "mt-4 p-5 rounded-xl text-base font-bold bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 border-2 border-green-200 dark:border-green-800 shadow-sm";
-    } else {
-        feedback.innerHTML = `❌ 答錯了！<br>正確答案：<span class="font-bold text-lg text-red-700 dark:text-red-400">${word.w}</span><br>${info}`;
-        feedback.className = "mt-4 p-5 rounded-xl text-base font-bold bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 border-2 border-red-200 dark:border-red-800 shadow-sm";
-    }
+    state.quiz.log.push({ word: state.quiz.targetWord, isCorrect, userAnswer: selected, pointsEarned: points });
+    finishQuestion();
 }
 
 function checkTypingAnswer() {
@@ -212,96 +207,101 @@ function checkTypingAnswer() {
     const input = document.getElementById('typing-input');
     const userAnswer = input.value.trim();
     if (!userAnswer) return;
+
     state.quiz.isAnswered = true;
     input.disabled = true;
     renderTiles(userAnswer, true);
+
     const isCorrect = normalize(userAnswer) === normalize(state.quiz.targetWord.w);
-    const basePoints = 100 / state.quiz.total;
-    const earned = isCorrect ? Math.max(0, basePoints - state.quiz.hintPenalty) : 0;
+    const base = 100 / state.quiz.total;
+    const earned = isCorrect ? Math.max(0, base - state.quiz.hintPenalty) : 0;
     if (isCorrect) state.quiz.score += earned;
+
+    Debug.quiz('typing', isCorrect ? '✓' : '✗', state.quiz.targetWord.w, 'pts:', earned);
+
     state.quiz.log.push({ word: state.quiz.targetWord, isCorrect, userAnswer, pointsEarned: earned });
     showTypingFeedback(isCorrect, state.quiz.targetWord);
     finishQuestion();
 }
 
+function showTypingFeedback(isCorrect, word) {
+    const fb = document.getElementById('quiz-feedback');
+    fb.classList.remove('hidden');
+    const info = `<span class="text-xs text-slate-500 italic mt-1 inline-block">(${word.p}) ${word.ph}</span>`;
+    if (isCorrect) {
+        fb.innerHTML = `✅ 答對了！<br>單字：<span class="font-bold text-lg">${word.w}</span><br>${info}`;
+        fb.className = 'mt-4 p-5 rounded-xl text-base font-bold bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 border-2 border-green-200 dark:border-green-800 shadow-sm';
+    } else {
+        fb.innerHTML = `❌ 答錯了！<br>正確答案：<span class="font-bold text-lg text-red-700 dark:text-red-400">${word.w}</span><br>${info}`;
+        fb.className = 'mt-4 p-5 rounded-xl text-base font-bold bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 border-2 border-red-200 dark:border-red-800 shadow-sm';
+    }
+}
+
 function finishQuestion() {
     state.quiz.currentIdx++;
     document.getElementById('quiz-score-display').textContent = `${Math.round(state.quiz.score)} 分`;
-    const nextBtn = document.getElementById('next-quiz-btn');
-    nextBtn.classList.remove('hidden');
-    nextBtn.textContent = state.quiz.currentIdx >= state.quiz.total ? '查看結果 ✨' : '下一題 ➔';
+    const btn = document.getElementById('next-quiz-btn');
+    btn.classList.remove('hidden');
+    btn.textContent = state.quiz.currentIdx >= state.quiz.total ? '查看結果 ✨' : '下一題 ➔';
 }
 
-function advanceQuiz() {
-    startQuiz();
-}
+function advanceQuiz() { startQuiz(); }
 
-// ===== QUIZ RESULTS =====
+// ===== RESULTS =====
 
 function triggerConfetti(score) {
     if (typeof confetti !== 'function') return;
-    
-    if (score === 100) {
-        // Perfect score: Fireworks
-        var duration = 3 * 1000;
-        var animationEnd = Date.now() + duration;
-        var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 100 };
 
-        function randomInRange(min, max) { return Math.random() * (max - min) + min; }
-        var interval = setInterval(function() {
-            var timeLeft = animationEnd - Date.now();
-            if (timeLeft <= 0) { return clearInterval(interval); }
-            var particleCount = 50 * (timeLeft / duration);
-            confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
-            confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+    if (score === 100) {
+        const end = Date.now() + 3000;
+        const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 100 };
+        const rand = (a, b) => Math.random() * (b - a) + a;
+        const iv = setInterval(() => {
+            const t = end - Date.now();
+            if (t <= 0) return clearInterval(iv);
+            const n = 50 * (t / 3000);
+            confetti({ ...defaults, particleCount: n, origin: { x: rand(0.1, 0.3), y: Math.random() - 0.2 } });
+            confetti({ ...defaults, particleCount: n, origin: { x: rand(0.7, 0.9), y: Math.random() - 0.2 } });
         }, 250);
     } else if (score >= 80) {
-        // Great score: School Pride (side cannons)
-        var end = Date.now() + (2 * 1000);
-        var colors = ['#4f46e5', '#818cf8', '#ffffff'];
+        const end = Date.now() + 2000;
+        const colors = ['#4f46e5', '#818cf8', '#ffffff'];
         (function frame() {
-            confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: colors, zIndex: 100 });
-            confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: colors, zIndex: 100 });
-            if (Date.now() < end) { requestAnimationFrame(frame); }
-        }());
+            confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors, zIndex: 100 });
+            confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors, zIndex: 100 });
+            if (Date.now() < end) requestAnimationFrame(frame);
+        })();
     } else if (score >= 60) {
-        // Good score: Basic blast
         confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, zIndex: 100 });
     }
 }
 
 function showResults() {
-    document.getElementById('quiz-setup').classList.add('hidden');
-    document.getElementById('quiz-active').classList.add('hidden');
-    document.getElementById('quiz-results').classList.remove('hidden');
+    showQuizPanel('quiz-results');
     state.quiz.phase = 'results';
 
     const score = Math.round(state.quiz.score);
-    const total = state.quiz.log.length;
     const correct = state.quiz.log.filter(e => e.isCorrect).length;
     const wrong = state.quiz.log.filter(e => !e.isCorrect);
+    const total = state.quiz.log.length;
 
-    // Trigger confetti based on score
+    Debug.quiz('results', score, 'pts,', correct, '/', total, 'correct');
     triggerConfetti(score);
 
-    // Header
     const num = state.dayKey.replace('Day ', '');
     document.getElementById('results-day-label').textContent = `DAY ${num} — ${state.quiz.mode === 'en-zh' ? '選擇題' : '拼字填空'}`;
     document.getElementById('results-score').textContent = score;
-    const stars = score >= 90 ? '⭐⭐⭐⭐⭐' : score >= 80 ? '⭐⭐⭐⭐' : score >= 70 ? '⭐⭐⭐' : score >= 60 ? '⭐⭐' : '⭐';
-    document.getElementById('results-stars').textContent = stars;
+    document.getElementById('results-stars').textContent = score >= 90 ? '⭐⭐⭐⭐⭐' : score >= 80 ? '⭐⭐⭐⭐' : score >= 70 ? '⭐⭐⭐' : score >= 60 ? '⭐⭐' : '⭐';
     document.getElementById('results-summary').textContent = `答對 ${correct} / ${total} 題`;
 
-    // Missed words
     const missedSection = document.getElementById('missed-section');
     const reviewBtn = document.getElementById('review-missed-btn');
-    if (wrong.length > 0) {
+
+    if (wrong.length) {
         document.getElementById('missed-title').textContent = `答錯的單字（${wrong.length} 個）`;
         missedSection.classList.remove('hidden');
         reviewBtn.classList.remove('hidden');
-
-        const missedList = document.getElementById('missed-list');
-        missedList.innerHTML = wrong.map(e => `
+        document.getElementById('missed-list').innerHTML = wrong.map(e => `
             <div class="missed-word-row p-4 flex items-center justify-between gap-3">
                 <div class="flex-1">
                     <div class="font-bold text-slate-800 dark:text-slate-100">${e.word.w}</div>
@@ -318,10 +318,8 @@ function showResults() {
         reviewBtn.classList.add('hidden');
     }
 
-    // Save
     saveHistory({ dayKey: state.dayKey, range: state.range, mode: state.quiz.mode, score, total, timestamp: Date.now(), log: state.quiz.log });
-    const progress = loadProgress();
-    const prev = progress[state.dayKey] || {};
+    const prev = loadProgress()[state.dayKey] || {};
     saveProgress(state.dayKey, {
         quizBestScore: Math.max(score, prev.quizBestScore || 0),
         quizAttempts: (prev.quizAttempts || 0) + 1,
@@ -337,13 +335,11 @@ function toggleMissedWords() {
     chevron.style.transform = list.classList.contains('hidden') ? '' : 'rotate(180deg)';
 }
 
-function retryQuiz() {
-    renderQuizSetup();
-}
+function retryQuiz() { renderQuizSetup(); }
 
 function reviewMissedWords() {
     const wrong = state.quiz.log.filter(e => !e.isCorrect).map(e => e.word);
-    if (wrong.length === 0) return;
+    if (!wrong.length) return;
     state.card.activeList = wrong;
     state.card.idx = 0;
     state.studySubTab = 'cards';

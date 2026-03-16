@@ -2,68 +2,44 @@
 
 function showUpdateToast(waitingSW) {
     if (document.getElementById('sw-update-toast')) return;
+    Debug.ui('showUpdateToast');
     const toast = document.createElement('div');
     toast.id = 'sw-update-toast';
-    toast.innerHTML = `
-        <span>🆕 新版本已就緒</span>
-        <button onclick="applyUpdate()">立即更新</button>
-    `;
-    toast.style.cssText = `
-        position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 72px);
-        left:50%;transform:translateX(-50%);
-        background:var(--color-accent,#5856d6);color:#fff;
-        padding:10px 16px;border-radius:12px;
-        display:flex;align-items:center;gap:12px;
-        font-size:14px;font-weight:500;
-        box-shadow:0 4px 20px rgba(0,0,0,.3);
-        z-index:9999;white-space:nowrap;
-    `;
-    toast.querySelector('button').style.cssText = `
-        background:rgba(255,255,255,.25);border:none;
-        color:#fff;padding:4px 12px;border-radius:8px;
-        font-size:13px;font-weight:600;cursor:pointer;
-    `;
+    toast.className = 'sw-toast';
+    toast.innerHTML = `<span>🆕 新版本已就緒</span><button onclick="applyUpdate()">立即更新</button>`;
     document.body.appendChild(toast);
     window._pendingSW = waitingSW;
 }
 
 function applyUpdate() {
-    if (window._pendingSW) {
-        window._pendingSW.postMessage({ type: 'SKIP_WAITING' });
-    }
-    const t = document.getElementById('sw-update-toast');
-    if (t) t.remove();
+    window._pendingSW?.postMessage({ type: 'SKIP_WAITING' });
+    document.getElementById('sw-update-toast')?.remove();
 }
 
 // ===== NAVIGATION =====
 
-function switchScreen(screenName) {
-    const screens = ['home', 'study', 'quiz', 'stats'];
-    const prevScreen = state.activeScreen;
-    screens.forEach(s => {
-        const el = document.getElementById('screen-' + s);
-        el.classList.add('hidden');
-        el.classList.remove('screen-enter', 'screen-enter-left');
-        const tab = document.getElementById('tab-' + s);
-        if (tab) tab.classList.remove('tab-btn-active');
+const SCREENS = ['home', 'study', 'quiz', 'stats'];
+const SCREEN_ORDER = { home: 0, study: 1, quiz: 2, stats: 3 };
+const SCREEN_RENDERERS = { home: renderHomeScreen, study: renderStudyScreen, quiz: renderQuizSetup, stats: renderStatsScreen };
+
+function switchScreen(name) {
+    const prev = state.activeScreen;
+    Debug.ui('switchScreen', prev, '→', name);
+
+    SCREENS.forEach(s => {
+        document.getElementById('screen-' + s).classList.add('hidden');
+        document.getElementById('screen-' + s).classList.remove('screen-enter', 'screen-enter-left');
+        document.getElementById('tab-' + s)?.classList.remove('tab-btn-active');
     });
-    const el = document.getElementById('screen-' + screenName);
+
+    const el = document.getElementById('screen-' + name);
     el.classList.remove('hidden');
-    
-    // Slide direction: home always slides left, going to home from child slides right
-    const order = { home: 0, study: 1, quiz: 2, stats: 3 };
-    const isGoingBack = order[screenName] < order[prevScreen];
-    el.classList.add(isGoingBack ? 'screen-enter-left' : 'screen-enter');
+    el.classList.add(SCREEN_ORDER[name] < SCREEN_ORDER[prev] ? 'screen-enter-left' : 'screen-enter');
     setTimeout(() => el.classList.remove('screen-enter', 'screen-enter-left'), 300);
 
-    const tab = document.getElementById('tab-' + screenName);
-    if (tab) tab.classList.add('tab-btn-active');
-
-    state.activeScreen = screenName;
-    if (screenName === 'home')  renderHomeScreen();
-    if (screenName === 'study') renderStudyScreen();
-    if (screenName === 'quiz')  renderQuizSetup();
-    if (screenName === 'stats') renderStatsScreen();
+    document.getElementById('tab-' + name)?.classList.add('tab-btn-active');
+    state.activeScreen = name;
+    SCREEN_RENDERERS[name]?.();
     savePrefs();
 }
 
@@ -72,8 +48,10 @@ function goQuiz()  { switchScreen('quiz'); }
 
 // ===== DARK MODE =====
 
+const DARK_BTN_IDS = ['dark-mode-btn', 'dark-mode-btn-study', 'dark-mode-btn-quiz', 'dark-mode-btn-stats'];
+
 function syncDarkBtns(isDark) {
-    ['dark-mode-btn', 'dark-mode-btn-study', 'dark-mode-btn-quiz', 'dark-mode-btn-stats'].forEach(id => {
+    DARK_BTN_IDS.forEach(id => {
         const el = document.getElementById(id);
         if (el) el.textContent = isDark ? '☀️' : '🌙';
     });
@@ -86,6 +64,7 @@ function syncDarkBtns(isDark) {
 
 function toggleDarkMode() {
     const isDark = document.documentElement.classList.toggle('dark');
+    Debug.ui('darkMode', isDark);
     syncDarkBtns(isDark);
     savePrefs();
 }
@@ -93,14 +72,14 @@ function toggleDarkMode() {
 // ===== RANGE =====
 
 function setRange(range) {
+    Debug.ui('setRange', range);
     state.range = range;
     state.card.activeList = getSubList(range);
     state.card.idx = 0;
     renderRangePills('study-range-pills', range, 'setRange');
     renderRangePills('quiz-range-pills', range, 'setRange');
     if (state.activeScreen === 'study') {
-        if (state.studySubTab === 'cards') updateCard();
-        else initTable();
+        state.studySubTab === 'cards' ? updateCard() : initTable();
     }
     savePrefs();
 }
@@ -108,12 +87,12 @@ function setRange(range) {
 function renderRangePills(containerId, activeRange, callbackName) {
     const container = document.getElementById(containerId);
     if (!container) return;
-    const words = vocabData[state.dayKey] || [];
-    const count = words.length;
+    const count = (vocabData[state.dayKey] || []).length;
+
     let html = `<button onclick="${callbackName}('all')" class="range-pill ${activeRange === 'all' ? 'range-pill-active' : ''}">全部</button>`;
     for (let i = 0; i < count; i += 10) {
-        const rangeText = `${i + 1}-${Math.min(i + 10, count)}`;
-        html += `<button onclick="${callbackName}('${rangeText}')" class="range-pill ${activeRange === rangeText ? 'range-pill-active' : ''}">${rangeText}</button>`;
+        const r = `${i + 1}-${Math.min(i + 10, count)}`;
+        html += `<button onclick="${callbackName}('${r}')" class="range-pill ${activeRange === r ? 'range-pill-active' : ''}">${r}</button>`;
     }
     container.innerHTML = html;
 }

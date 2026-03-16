@@ -21,6 +21,24 @@ html.dark {
     --text-dim: #636366;
 }
 
+/* ===== SW UPDATE TOAST ===== */
+.sw-toast {
+    position: fixed;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 72px);
+    left: 50%; transform: translateX(-50%);
+    background: var(--primary); color: #fff;
+    padding: 10px 16px; border-radius: 12px;
+    display: flex; align-items: center; gap: 12px;
+    font-size: 14px; font-weight: 500;
+    box-shadow: 0 4px 20px rgba(0,0,0,.3);
+    z-index: 9999; white-space: nowrap;
+}
+.sw-toast button {
+    background: rgba(255,255,255,.25); border: none;
+    color: #fff; padding: 4px 12px; border-radius: 8px;
+    font-size: 13px; font-weight: 600; cursor: pointer;
+}
+
 /* ===== RESET & BASE ===== */
 *, *::before, *::after { box-sizing: border-box; }
 

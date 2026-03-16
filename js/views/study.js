@@ -1,230 +1,165 @@
 // ===== STUDY SCREEN =====
 
 function renderStudyScreen() {
-    // Only reset activeList if not a "review missed words" override
     if (!state._reviewOverride) state.card.activeList = getSubList(state.range);
     state._reviewOverride = false;
-    const num = state.dayKey.replace('Day ', '');
-    document.getElementById('study-day-label').textContent = `DAY ${num}`;
+    Debug.study('render', state.dayKey, 'range:', state.range);
 
+    document.getElementById('study-day-label').textContent = `DAY ${state.dayKey.replace('Day ', '')}`;
     renderRangePills('study-range-pills', state.range, 'setRange');
     switchStudySubTab(state.studySubTab);
     initCardSwipes();
-
     updateStreak();
     saveProgress(state.dayKey, { studiedAt: new Date().toISOString().slice(0, 10) });
 }
 
 function switchStudySubTab(subTab) {
     state.studySubTab = subTab;
-    const cardsView = document.getElementById('study-cards-view');
-    const listView  = document.getElementById('study-list-view');
-    const tabCards  = document.getElementById('study-tab-cards');
-    const tabList   = document.getElementById('study-tab-list');
-    
-    // Remove existing animation class to restart it
-    cardsView.classList.remove('study-view-fade', 'hidden');
-    listView.classList.remove('study-view-fade', 'hidden');
+    Debug.study('subTab', subTab);
+    const isCards = subTab === 'cards';
 
-    if (subTab === 'cards') {
-        listView.classList.add('hidden');
-        cardsView.classList.add('study-view-fade');
-        tabCards.classList.add('seg-btn-active');
-        tabList.classList.remove('seg-btn-active');
-        updateCard();
-    } else {
-        cardsView.classList.add('hidden');
-        listView.classList.add('study-view-fade');
-        tabList.classList.add('seg-btn-active');
-        tabCards.classList.remove('seg-btn-active');
-        initTable();
-    }
+    const cardsView = document.getElementById('study-cards-view');
+    const listView = document.getElementById('study-list-view');
+    [cardsView, listView].forEach(v => v.classList.remove('study-view-fade', 'hidden'));
+
+    (isCards ? listView : cardsView).classList.add('hidden');
+    (isCards ? cardsView : listView).classList.add('study-view-fade');
+
+    document.getElementById('study-tab-cards').classList.toggle('seg-btn-active', isCards);
+    document.getElementById('study-tab-list').classList.toggle('seg-btn-active', !isCards);
+
+    isCards ? updateCard() : initTable();
 }
 
 // ===== FLASHCARD =====
 
-let touchStartX = 0;
-let touchStartY = 0;
-let isSwipeAction = false;
-let swipeContainer = null;
-let lastSwipeTime = 0;
+let touchStartX = 0, touchStartY = 0, isSwipeAction = false, swipeContainer = null, lastSwipeTime = 0;
 
 function initCardSwipes() {
     const card = document.getElementById('flashcard-inner');
     swipeContainer = document.querySelector('.card-flip');
     if (!card || card._swipeInit) return;
 
-    const startSwipe = (x, y) => {
-        touchStartX = x;
-        touchStartY = y;
-        isSwipeAction = false;
+    const onStart = (x, y) => {
+        touchStartX = x; touchStartY = y; isSwipeAction = false;
         if (swipeContainer) swipeContainer.style.transition = 'none';
     };
 
-    const moveSwipe = (x, y) => {
+    const onMove = (x) => {
         const dx = x - touchStartX;
-        const dy = y - touchStartY;
         if (Math.abs(dx) > 10) isSwipeAction = true;
-        
         if (isSwipeAction && swipeContainer) {
-            const rotate = dx * 0.05;
-            swipeContainer.style.transform = `translateX(${dx}px) rotate(${rotate}deg)`;
-            
-            // Visual feedback overlay
-            if (dx > 0) {
-                card.style.boxShadow = `0 10px 40px rgba(34, 197, 94, ${Math.min(0.4, dx/200)})`;
-            } else {
-                card.style.boxShadow = `0 10px 40px rgba(239, 68, 68, ${Math.min(0.4, Math.abs(dx)/200)})`;
-            }
+            swipeContainer.style.transform = `translateX(${dx}px) rotate(${dx * 0.05}deg)`;
+            const color = dx > 0 ? '34, 197, 94' : '239, 68, 68';
+            card.style.boxShadow = `0 10px 40px rgba(${color}, ${Math.min(0.4, Math.abs(dx) / 200)})`;
         }
     };
 
-    const endSwipe = (x, y) => {
+    const onEnd = (x) => {
         const dx = x - touchStartX;
-        const dy = y - touchStartY;
-        
-        if (Math.abs(dx) > 10 || Math.abs(dy) > 10) {
-            lastSwipeTime = Date.now(); // Record the time of an actual swipe/drag to prevent click
-        }
+        if (Math.abs(dx) > 10) lastSwipeTime = Date.now();
 
         if (swipeContainer) swipeContainer.style.transition = 'transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1)';
-        card.style.boxShadow = ''; 
-        
-        if (Math.abs(dx) > 80 && Math.abs(dx) > Math.abs(dy)) {
+        card.style.boxShadow = '';
+
+        if (Math.abs(dx) > 80) {
             isSwipeAction = true;
-            if (dx > 0) {
-                swipeContainer.style.transform = `translateX(${window.innerWidth}px) rotate(30deg)`;
-                markCardMastery(1);
-            } else {
-                swipeContainer.style.transform = `translateX(-${window.innerWidth}px) rotate(-30deg)`;
-                markCardMastery(-1);
-            }
+            const dir = dx > 0 ? 1 : -1;
+            swipeContainer.style.transform = `translateX(${dir * window.innerWidth}px) rotate(${dir * 30}deg)`;
+            markCardMastery(dir);
         } else if (swipeContainer) {
             swipeContainer.style.transform = '';
             setTimeout(() => { isSwipeAction = false; }, 50);
         }
     };
 
-    // Touch Events
-    card.addEventListener('touchstart', e => startSwipe(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
-    card.addEventListener('touchmove', e => moveSwipe(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
-    card.addEventListener('touchend', e => endSwipe(e.changedTouches[0].clientX, e.changedTouches[0].clientY), { passive: true });
-    
+    card.addEventListener('touchstart', e => onStart(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
+    card.addEventListener('touchmove', e => onMove(e.touches[0].clientX), { passive: true });
+    card.addEventListener('touchend', e => onEnd(e.changedTouches[0].clientX), { passive: true });
     card._swipeInit = true;
 }
 
 function markCardMastery(delta) {
-    const cardObj = state.card.activeList[state.card.idx];
-    if (cardObj && typeof updateWordMastery === 'function') {
-        updateWordMastery(cardObj.w, delta);
+    const word = state.card.activeList[state.card.idx];
+    if (word) {
+        updateWordMastery(word.w, delta);
+        Debug.study('mastery', word.w, delta > 0 ? '+1' : '-1');
     }
-    
     setTimeout(() => {
-        if (swipeContainer) {
-            swipeContainer.style.transition = 'none';
-            swipeContainer.style.transform = '';
-        }
-        isSwipeAction = false; // Reset swipe state
-        nextCard(true); // pass true to skip the fade-out animation
+        if (swipeContainer) { swipeContainer.style.transition = 'none'; swipeContainer.style.transform = ''; }
+        isSwipeAction = false;
+        nextCard(true);
     }, 280);
 }
 
 function handleCardClick(e) {
-    // If a swipe or drag occurred recently, ignore the click to prevent accidental flips
-    if (Date.now() - lastSwipeTime < 500) {
-        return;
-    }
-    
-    if (isSwipeAction) {
-        isSwipeAction = false;
-        return;
-    }
-    if (!e.target.closest('button')) {
-        document.getElementById('flashcard-inner').classList.toggle('flipped');
-    }
+    if (Date.now() - lastSwipeTime < 500 || isSwipeAction) { isSwipeAction = false; return; }
+    if (!e.target.closest('button')) document.getElementById('flashcard-inner').classList.toggle('flipped');
 }
 
-function renderMasteryDots(masteryLevel) {
-    const dotsContainer = document.getElementById('card-mastery-dots');
-    if (!dotsContainer) return;
-    
-    let html = '';
-    for (let i = 0; i < 3; i++) {
-        if (i < masteryLevel) {
-            html += `<div class="w-2.5 h-2.5 rounded-full bg-green-400 dark:bg-green-500 shadow-[0_0_8px_rgba(74,222,128,0.6)]"></div>`;
-        } else {
-            html += `<div class="w-2.5 h-2.5 rounded-full bg-slate-200 dark:bg-slate-700"></div>`;
-        }
-    }
-    dotsContainer.innerHTML = html;
+function renderMasteryDots(level) {
+    const el = document.getElementById('card-mastery-dots');
+    if (!el) return;
+    el.innerHTML = Array.from({ length: 3 }, (_, i) =>
+        `<div class="w-2.5 h-2.5 rounded-full ${i < level ? 'bg-green-400 dark:bg-green-500 shadow-[0_0_8px_rgba(74,222,128,0.6)]' : 'bg-slate-200 dark:bg-slate-700'}"></div>`
+    ).join('');
 }
 
-function updateCard(animationClass, skipOutAnim) {
+function updateCard(anim, skipOut) {
     const card = state.card.activeList[state.card.idx];
     if (!card) return;
+    Debug.study('updateCard', card.w, state.card.idx);
+
     const inner = document.getElementById('flashcard-inner');
-    
-    const applyInAnim = () => {
+
+    const apply = () => {
         inner.classList.remove('flipped');
         document.getElementById('card-word').textContent = card.w;
         document.getElementById('card-info').textContent = `(${card.p}) ${card.ph}`;
         document.getElementById('card-meaning').innerHTML = card.m.replace(/[，,]/g, '').replace(/[；;]/g, '<br>');
         document.getElementById('card-progress').textContent = `${state.card.idx + 1} / ${state.card.activeList.length}`;
-        
-        if (typeof getWordMastery === 'function') {
-            renderMasteryDots(getWordMastery(card.w));
-        }
+        renderMasteryDots(getWordMastery(card.w));
 
-        if (animationClass && typeof animationClass === 'string') {
-            inner.classList.add(animationClass + '-in');
-            setTimeout(() => inner.classList.remove(animationClass + '-in'), 250);
+        if (anim && typeof anim === 'string') {
+            inner.classList.add(anim + '-in');
+            setTimeout(() => inner.classList.remove(anim + '-in'), 250);
         }
     };
 
-    if (animationClass && typeof animationClass === 'string' && !skipOutAnim) {
-        inner.classList.add(animationClass + '-out');
-        setTimeout(() => {
-            inner.classList.remove(animationClass + '-out');
-            applyInAnim();
-        }, 250);
+    if (anim && typeof anim === 'string' && !skipOut) {
+        inner.classList.add(anim + '-out');
+        setTimeout(() => { inner.classList.remove(anim + '-out'); apply(); }, 250);
     } else {
-        applyInAnim();
+        apply();
     }
-    
     saveProgress(state.dayKey, { cardIdx: state.card.idx });
 }
 
-function nextCard(skipOutAnim = false) {
+function nextCard(skipOut) {
     state.card.idx = (state.card.idx + 1) % state.card.activeList.length;
-    updateCard('slide-left', skipOutAnim);
+    updateCard('slide-left', skipOut);
 }
 
-function prevCard(skipOutAnim = false) {
+function prevCard(skipOut) {
     state.card.idx = (state.card.idx - 1 + state.card.activeList.length) % state.card.activeList.length;
-    updateCard('slide-right', skipOutAnim);
+    updateCard('slide-right', skipOut);
 }
 
 // ===== WORD LIST =====
 
 function initTable() {
-    const container = document.getElementById('vocab-list-container');
-    const displayList = getSubList(state.range);
+    const list = getSubList(state.range);
     const startIdx = state.range === 'all' ? 0 : parseInt(state.range.split('-')[0]) - 1;
-    
-    container.innerHTML = displayList.map((item, idx) => `
-        <div class="vocab-list-item bg-white dark:bg-slate-800/80 p-4 rounded-2xl border border-slate-100 dark:border-slate-700/50 shadow-sm flex items-center gap-4 active:scale-[0.98] transition-all" style="--idx: ${idx}">
-            <div class="w-8 h-8 flex items-center justify-center bg-slate-50 dark:bg-slate-700 rounded-full text-[10px] font-bold text-slate-400 dark:text-slate-500 shrink-0">
-                ${startIdx + idx + 1}
-            </div>
+    Debug.study('initTable', list.length, 'words');
+
+    document.getElementById('vocab-list-container').innerHTML = list.map((item, idx) => `
+        <div class="vocab-list-item bg-white dark:bg-slate-800/80 p-4 rounded-2xl border border-slate-100 dark:border-slate-700/50 shadow-sm flex items-center gap-4 active:scale-[0.98] transition-all">
+            <div class="w-8 h-8 flex items-center justify-center bg-slate-50 dark:bg-slate-700 rounded-full text-[10px] font-bold text-slate-400 dark:text-slate-500 shrink-0">${startIdx + idx + 1}</div>
             <div class="flex-[1.5] min-w-0">
                 <div class="font-bold text-slate-800 dark:text-indigo-400 text-lg leading-tight mb-2 whitespace-nowrap truncate">${item.w}</div>
                 <div class="flex items-center gap-2 whitespace-nowrap">
-                    <span class="px-1.5 py-0.5 bg-indigo-50 dark:bg-indigo-900/40 text-indigo-500 dark:text-indigo-300 italic font-bold text-[10px] rounded-md shrink-0">
-                        ${item.p.replace(/[()]/g, '')}
-                    </span>
-                    <span class="text-slate-400 dark:text-slate-500 font-mono text-[11px] tracking-tight truncate">
-                        [ ${item.ph.replace(/[\/\[\]]/g, '')} ]
-                    </span>
+                    <span class="px-1.5 py-0.5 bg-indigo-50 dark:bg-indigo-900/40 text-indigo-500 dark:text-indigo-300 italic font-bold text-[10px] rounded-md shrink-0">${item.p.replace(/[()]/g, '')}</span>
+                    <span class="text-slate-400 dark:text-slate-500 font-mono text-[11px] tracking-tight truncate">[ ${item.ph.replace(/[\/\[\]]/g, '')} ]</span>
                 </div>
             </div>
             <div class="flex-1 text-right min-w-0 px-1">

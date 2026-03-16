@@ -2,36 +2,37 @@
 
 let currentUtterance = null;
 
-function playVocabAudio(type, btnElement, event) {
-    if (event) event.stopPropagation();
-    try {
-        let text = '';
-        if (type === 'card') text = state.card.activeList[state.card.idx].w;
-        else if (type === 'quiz') text = state.quiz.targetWord.w;
-        else if (typeof type === 'string' && type.length > 3) text = type; // direct word
-        if (text) playAudio(text, btnElement, event);
-    } catch(e) { console.error('Audio error:', e); }
+function stripDiacritics(str) {
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
 
 function normalize(str) {
-    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    return stripDiacritics(str).toLowerCase();
 }
 
-function playAudio(text, btnElement, event) {
-    if (event) event.stopPropagation();
+function playVocabAudio(type, btn, e) {
+    if (e) e.stopPropagation();
+    const text = type === 'card'  ? state.card.activeList[state.card.idx]?.w
+               : type === 'quiz'  ? state.quiz.targetWord?.w
+               : type.length > 3  ? type : '';
+    if (text) playAudio(text, btn, e);
+}
+
+function playAudio(text, btn, e) {
+    if (e) e.stopPropagation();
     if (!window.speechSynthesis) return;
-    window.speechSynthesis.resume();
-    window.speechSynthesis.cancel();
-    if (btnElement) {
-        btnElement.classList.add('is-speaking');
-        setTimeout(() => btnElement.classList.remove('is-speaking'), 3000);
+    Debug.audio('play', text);
+
+    speechSynthesis.resume();
+    speechSynthesis.cancel();
+
+    if (btn) {
+        btn.classList.add('is-speaking');
+        setTimeout(() => btn.classList.remove('is-speaking'), 3000);
     }
-    const normalizedText = text.normalize('NFD').replace(/[̀-ͯ]/g, '');
-    currentUtterance = new SpeechSynthesisUtterance(normalizedText);
-    currentUtterance.lang = 'en-US';
-    currentUtterance.rate = 0.9;
-    currentUtterance.volume = 1.0;
-    currentUtterance.onend = () => { if (btnElement) btnElement.classList.remove('is-speaking'); };
-    currentUtterance.onerror = () => { if (btnElement) btnElement.classList.remove('is-speaking'); };
-    setTimeout(() => window.speechSynthesis.speak(currentUtterance), 50);
+
+    currentUtterance = new SpeechSynthesisUtterance(stripDiacritics(text));
+    Object.assign(currentUtterance, { lang: 'en-US', rate: 0.9, volume: 1.0 });
+    currentUtterance.onend = currentUtterance.onerror = () => btn?.classList.remove('is-speaking');
+    setTimeout(() => speechSynthesis.speak(currentUtterance), 50);
 }
