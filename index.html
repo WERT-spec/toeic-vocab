@@ -5,8 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-title" content="TOEIC 30天單字">
     <meta name="description" content="TOEIC 30天單字集，幫助您透過每日測驗與複習快速掌握多益核心單字。">
-    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
-    <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a">
+    <script>
+    // Sync theme-color with stored dark-mode preference before first paint
+    try {
+        var p = JSON.parse(localStorage.getItem('toeic_prefs') || '{}');
+        if (!p.darkMode) document.querySelector('meta[name="theme-color"]').content = '#f8fafc';
+    } catch(e) {}
+    </script>
     
     <title>TOEIC 30天單字集</title>
     
