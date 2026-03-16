@@ -20,9 +20,7 @@
 </head>
 <body>
 
-<!-- Phone wrap (acts as device frame on desktop) -->
 <div id="phone-wrap">
-
 
     <!-- Scrollable App Content -->
     <div id="app">
@@ -30,7 +28,6 @@
         <!-- ===== SCREEN: HOME ===== -->
         <div id="screen-home" class="screen">
             <header class="app-nav-bar">
-                <div></div>
                 <div class="app-nav-title" id="app-title">TOEIC 單字訓練</div>
                 <button onclick="toggleDarkMode()" id="dark-mode-btn" class="nav-icon-btn">🌙</button>
             </header>
@@ -87,7 +84,6 @@
         <!-- ===== SCREEN: STUDY ===== -->
         <div id="screen-study" class="screen hidden">
             <header class="app-nav-bar">
-                <div></div>
                 <div class="app-nav-title" id="study-day-label">DAY 01</div>
                 <button onclick="toggleDarkMode()" id="dark-mode-btn-study" class="nav-icon-btn">🌙</button>
             </header>
@@ -144,7 +140,6 @@
             <!-- QUIZ SETUP -->
             <div id="quiz-setup">
                 <header class="app-nav-bar">
-                    <div></div>
                     <div class="app-nav-title" id="quiz-setup-day-label">DAY 01</div>
                     <button onclick="toggleDarkMode()" id="dark-mode-btn-quiz" class="nav-icon-btn">🌙</button>
                 </header>
@@ -194,7 +189,6 @@
                     <span id="quiz-progress-text" class="text-xs font-bold text-slate-500 tracking-widest">第 1 / 40 題</span>
                     <span id="quiz-score-display" class="text-sm font-bold text-indigo-600 dark:text-indigo-400">0 分</span>
                 </header>
-                <!-- Progress Bar (below nav bar) -->
                 <div class="quiz-progress-bar mx-4">
                     <div id="quiz-progress-fill" class="quiz-progress-bar-fill" style="width:0%"></div>
                 </div>
@@ -225,7 +219,6 @@
             <!-- QUIZ RESULTS -->
             <div id="quiz-results" class="hidden">
                 <header class="app-nav-bar">
-                    <div></div>
                     <div class="app-nav-title">測驗結果</div>
                     <button onclick="toggleDarkMode()" id="dark-mode-btn-results" class="nav-icon-btn">🌙</button>
                 </header>
@@ -238,7 +231,6 @@
                         <p id="results-summary" class="text-slate-500 text-sm font-medium"></p>
                     </div>
 
-                    <!-- Missed Words -->
                     <div id="missed-section" class="hidden section-card border-red-100 dark:border-red-900/30 mb-4 p-0 overflow-hidden">
                         <button onclick="toggleMissedWords()" class="w-full flex items-center justify-between p-4 text-left">
                             <span id="missed-title" class="font-bold text-red-500 dark:text-red-400 text-sm"></span>
@@ -259,7 +251,6 @@
         <!-- ===== SCREEN: STATS ===== -->
         <div id="screen-stats" class="screen hidden">
             <header class="app-nav-bar">
-                <div></div>
                 <div class="app-nav-title">學習統計</div>
                 <button onclick="toggleDarkMode()" id="dark-mode-btn-stats" class="nav-icon-btn">🌙</button>
             </header>
