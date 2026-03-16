@@ -35,6 +35,10 @@
 
 使用者透過 Safari 瀏覽器開啟，並使用「加入主畫面」功能將 App 安裝為 PWA，在桌面像一般 App 一樣使用。`manifest.json` 與三個 icon 檔案（icon-180.png、icon-192.png、icon-512.png）為必要檔案，請勿刪除。
 
+**PWA 開發注意事項（iOS / Safari）：**
+- 為了避免 iOS 發生 Letterboxing（上下出現黑邊，把畫面壓扁），**不要**在 `index.html` 加入傳統的 `<meta name="apple-mobile-web-app-capable" content="yes">` 標籤，而是只依賴 `manifest.json` 與 `viewport-fit=cover` 來讓 iOS 自動計算全螢幕。
+- 如果使用者反映更新 PWA 後佈局跑掉或出現黑邊，這是因為 iOS 會死記住初次「加入主畫面」時的狀態。唯一的解法是**刪除桌面舊的 PWA，然後重新打開 Safari 再次「加入主畫面」**。
+
 ## 新增單字資料
 
 若要新增天次，請依照現有格式擴充 [js/vocab.js](js/vocab.js) 中的匯出物件：
