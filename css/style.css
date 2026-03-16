@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-
 /* ===== CSS VARIABLES ===== */
 :root {
     --primary: #5856d6;
@@ -26,30 +24,18 @@ html.dark {
 /* ===== RESET & BASE ===== */
 *, *::before, *::after { box-sizing: border-box; }
 
-html {
-    height: 100%;
-    height: -webkit-fill-available;
-}
-
 html, body {
     margin: 0; padding: 0;
+    height: 100%;
+    overflow: hidden;
+    background: var(--bg);
     font-family: 'Inter', 'PingFang TC', 'Microsoft JhengHei', -apple-system, sans-serif;
     overscroll-behavior: none;
     -webkit-tap-highlight-color: transparent;
     user-select: none; -webkit-user-select: none;
-    overflow: hidden;
 }
 input, textarea { user-select: auto; -webkit-user-select: auto; }
 button, a { touch-action: manipulation; }
-
-/* ===== MOBILE-FIRST LAYOUT ===== */
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    overflow: hidden;
-    background: var(--bg);
-}
 
 #phone-wrap {
     position: fixed;

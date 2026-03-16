@@ -6,41 +6,47 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="TOEIC 30天單字">
-    <link rel="apple-touch-startup-image" href="icon-512.png">
+    <meta name="description" content="TOEIC 30天單字集，幫助您透過每日測驗與複習快速掌握多益核心單字。">
     <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
     <meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
+    
     <title>TOEIC 30天單字集</title>
-    <script>tailwind.config = { darkMode: 'class' }</script>
-    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap">
+    
     <link rel="icon" href="logo.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="icon-180.png">
+    <link rel="apple-touch-startup-image" href="icon-512.png">
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <script>tailwind.config = { darkMode: 'class' }</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
 </head>
 <body>
 
 <div id="phone-wrap">
 
-    <!-- Scrollable App Content -->
-    <div id="app">
+    <main id="app">
 
-        <!-- ===== SCREEN: HOME ===== -->
-        <div id="screen-home" class="screen">
+        <section id="screen-home" class="screen">
             <header class="app-nav-bar">
-                <div class="app-nav-title" id="app-title">TOEIC 單字訓練</div>
-                <button onclick="toggleDarkMode()" id="dark-mode-btn" class="nav-icon-btn">🌙</button>
+                <h1 class="app-nav-title" id="app-title">TOEIC 單字訓練</h1>
+                <button onclick="toggleDarkMode()" id="dark-mode-btn" class="nav-icon-btn" aria-label="切換深色模式">🌙</button>
             </header>
 
             <div class="screen-body">
-                <!-- Dashboard Row -->
                 <div class="flex gap-3 mb-3">
-                    <!-- Progress Card -->
                     <div class="dash-card dash-card-progress flex-1 flex items-center gap-4 p-4">
-                        <div class="relative shrink-0" style="width:64px;height:64px">
+                        <div class="relative shrink-0 w-16 h-16">
                             <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
                                 <circle cx="18" cy="18" r="15" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="3.5"></circle>
-                                <circle id="dash-progress-circle" cx="18" cy="18" r="15" fill="none" stroke="url(#dashGrad)" stroke-width="3.5" stroke-dasharray="94.2" stroke-dashoffset="94.2" stroke-linecap="round" style="transition:stroke-dashoffset 1s ease-out;"></circle>
+                                <circle id="dash-progress-circle" cx="18" cy="18" r="15" fill="none" stroke="url(#dashGrad)" stroke-width="3.5" stroke-dasharray="94.2" stroke-dashoffset="94.2" stroke-linecap="round" class="transition-[stroke-dashoffset] duration-1000 ease-out"></circle>
                                 <defs>
                                     <linearGradient id="dashGrad" x1="0%" y1="0%" x2="100%" y2="0%">
                                         <stop offset="0%" stop-color="#9d99f0"/>
@@ -55,7 +61,7 @@
                         <div class="flex-1 min-w-0">
                             <div class="flex items-center gap-1 mb-1">
                                 <span class="text-xs font-black text-white tracking-wide">整體學習進度</span>
-                                <span class="text-sm">✨</span>
+                                <span class="text-sm" aria-hidden="true">✨</span>
                             </div>
                             <p class="text-xs text-white/70 mb-2">已掌握 <span id="dash-mastered-count" class="font-black text-white">0</span> / <span id="dash-total-count">0</span> 單字</p>
                             <div class="flex gap-3">
@@ -64,50 +70,43 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Streak Card -->
                     <div id="streak-display" class="dash-card dash-card-streak flex flex-col items-center justify-center gap-1 px-4 py-3">
-                        <div class="text-3xl mb-1">🔥</div>
+                        <div class="text-3xl mb-1" aria-hidden="true">🔥</div>
                         <div class="text-[9px] font-black text-white/60 tracking-widest uppercase">Learning Streak</div>
                         <div class="text-base font-black text-white leading-tight"><span id="streak-text">連續 1 天</span></div>
                     </div>
                 </div>
 
-                <!-- Day Grid -->
                 <div class="section-card">
-                    <div class="section-label">選擇天次</div>
+                    <h2 class="section-label">選擇天次</h2>
                     <div class="grid grid-cols-5 gap-3" id="day-grid"></div>
                 </div>
-
             </div>
-        </div>
+        </section>
 
-        <!-- ===== SCREEN: STUDY ===== -->
-        <div id="screen-study" class="screen hidden">
+        <section id="screen-study" class="screen hidden">
             <header class="app-nav-bar">
-                <div class="app-nav-title" id="study-day-label">DAY 01</div>
-                <button onclick="toggleDarkMode()" id="dark-mode-btn-study" class="nav-icon-btn">🌙</button>
+                <h1 class="app-nav-title" id="study-day-label">DAY 01</h1>
+                <button onclick="toggleDarkMode()" id="dark-mode-btn-study" class="nav-icon-btn" aria-label="切換深色模式">🌙</button>
             </header>
 
             <div class="screen-body">
-                <!-- Range Pills -->
                 <div class="flex flex-wrap gap-2 mb-3" id="study-range-pills"></div>
 
-                <!-- Sub-tab Toggle -->
-                <div class="seg-control mb-4">
-                    <button onclick="switchStudySubTab('cards')" id="study-tab-cards" class="seg-btn seg-btn-active">🃏 卡片</button>
-                    <button onclick="switchStudySubTab('list')"  id="study-tab-list"  class="seg-btn">📋 列表</button>
+                <div class="seg-control mb-4" role="tablist">
+                    <button onclick="switchStudySubTab('cards')" id="study-tab-cards" class="seg-btn seg-btn-active" role="tab" aria-selected="true">🃏 卡片</button>
+                    <button onclick="switchStudySubTab('list')"  id="study-tab-list"  class="seg-btn" role="tab" aria-selected="false">📋 列表</button>
                 </div>
 
-                <!-- Cards Sub-view -->
-                <div id="study-cards-view">
+                <div id="study-cards-view" role="tabpanel">
                     <div id="card-area">
                         <div class="card-flip w-full h-72 mb-6">
-                            <div id="flashcard-inner" class="card-inner relative w-full h-full" onclick="handleCardClick(event)">
+                            <div id="flashcard-inner" class="card-inner relative w-full h-full cursor-pointer" onclick="handleCardClick(event)" role="button" tabindex="0" aria-label="翻轉單字卡">
                                 <div class="card-front bg-white rounded-2xl shadow-md border border-slate-200 flex flex-col items-center justify-center p-6 text-center relative">
                                     <div id="card-mastery-dots" class="absolute top-5 right-5 flex gap-1"></div>
                                     <h2 id="card-word" class="text-4xl font-bold text-slate-800 dark:text-slate-100 mb-4 tracking-tight text-center px-2 break-all">word</h2>
                                     <div class="flex flex-row items-center gap-3">
-                                        <button id="card-audio-btn" onclick="playVocabAudio('card', this, event)" class="w-12 h-12 flex items-center justify-center bg-slate-50 rounded-full text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all border border-slate-200 shadow-sm active:scale-95">
+                                        <button id="card-audio-btn" onclick="playVocabAudio('card', this, event); event.stopPropagation();" class="w-12 h-12 flex items-center justify-center bg-slate-50 rounded-full text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all border border-slate-200 shadow-sm active:scale-95" aria-label="播放發音">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>
                                         </button>
                                         <div class="bg-indigo-50 px-4 py-1.5 rounded-full border border-indigo-100">
@@ -122,38 +121,35 @@
                             </div>
                         </div>
                         <div class="flex justify-center items-center px-4">
-                            <span id="card-progress" class="card-progress-badge">0 / 0</span>
+                            <span id="card-progress" class="card-progress-badge" aria-live="polite">0 / 0</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- List Sub-view -->
-                <div id="study-list-view" class="hidden">
+                <div id="study-list-view" class="hidden" role="tabpanel">
                     <div id="vocab-list-container" class="space-y-3 pb-4"></div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- ===== SCREEN: QUIZ ===== -->
-        <div id="screen-quiz" class="screen hidden">
+        <section id="screen-quiz" class="screen hidden">
 
-            <!-- QUIZ SETUP -->
             <div id="quiz-setup">
                 <header class="app-nav-bar">
-                    <div class="app-nav-title" id="quiz-setup-day-label">DAY 01</div>
-                    <button onclick="toggleDarkMode()" id="dark-mode-btn-quiz" class="nav-icon-btn">🌙</button>
+                    <h1 class="app-nav-title" id="quiz-setup-day-label">DAY 01</h1>
+                    <button onclick="toggleDarkMode()" id="dark-mode-btn-quiz" class="nav-icon-btn" aria-label="切換深色模式">🌙</button>
                 </header>
                 <div class="screen-body">
                     <div class="section-card">
-                        <div class="section-label">選擇範圍</div>
+                        <h2 class="section-label">選擇範圍</h2>
                         <div class="flex flex-wrap gap-2" id="quiz-range-pills"></div>
                     </div>
 
                     <div class="section-card">
-                        <div class="section-label mb-3">選擇模式</div>
+                        <h2 class="section-label mb-3">選擇模式</h2>
                         <div class="flex flex-col gap-3">
                             <button onclick="selectQuizMode('en-zh')" id="mode-card-en-zh" class="quiz-mode-card flex items-center p-4 rounded-2xl border-2 border-slate-100 dark:border-slate-700/50 text-left transition-all relative overflow-hidden group">
-                                <div class="w-12 h-12 flex items-center justify-center bg-indigo-50/80 dark:bg-indigo-900/20 text-indigo-500 dark:text-indigo-400 rounded-full text-xl mr-4 shrink-0 transition-colors group-[.quiz-mode-card-selected]:bg-indigo-100 dark:group-[.quiz-mode-card-selected]:bg-indigo-900/50">📝</div>
+                                <div class="w-12 h-12 flex items-center justify-center bg-indigo-50/80 dark:bg-indigo-900/20 text-indigo-500 dark:text-indigo-400 rounded-full text-xl mr-4 shrink-0 transition-colors group-[.quiz-mode-card-selected]:bg-indigo-100 dark:group-[.quiz-mode-card-selected]:bg-indigo-900/50" aria-hidden="true">📝</div>
                                 <div class="flex-1">
                                     <div class="font-bold text-slate-800 dark:text-slate-100 text-base mb-0.5">選擇題</div>
                                     <div class="text-xs text-slate-400 dark:text-slate-500 font-medium tracking-wide">英文 → 中文</div>
@@ -163,7 +159,7 @@
                                 </div>
                             </button>
                             <button onclick="selectQuizMode('zh-en-type')" id="mode-card-zh-en-type" class="quiz-mode-card flex items-center p-4 rounded-2xl border-2 border-slate-100 dark:border-slate-700/50 text-left transition-all relative overflow-hidden group">
-                                <div class="w-12 h-12 flex items-center justify-center bg-indigo-50/80 dark:bg-indigo-900/20 text-indigo-500 dark:text-indigo-400 rounded-full text-xl mr-4 shrink-0 transition-colors group-[.quiz-mode-card-selected]:bg-indigo-100 dark:group-[.quiz-mode-card-selected]:bg-indigo-900/50">⌨️</div>
+                                <div class="w-12 h-12 flex items-center justify-center bg-indigo-50/80 dark:bg-indigo-900/20 text-indigo-500 dark:text-indigo-400 rounded-full text-xl mr-4 shrink-0 transition-colors group-[.quiz-mode-card-selected]:bg-indigo-100 dark:group-[.quiz-mode-card-selected]:bg-indigo-900/50" aria-hidden="true">⌨️</div>
                                 <div class="flex-1">
                                     <div class="font-bold text-slate-800 dark:text-slate-100 text-base mb-0.5">拼字填空</div>
                                     <div class="text-xs text-slate-400 dark:text-slate-500 font-medium tracking-wide">中文 → 英文</div>
@@ -180,24 +176,23 @@
                 </div>
             </div>
 
-            <!-- QUIZ ACTIVE -->
             <div id="quiz-active" class="hidden">
                 <header class="app-nav-bar">
-                    <button onclick="abandonQuiz()" class="nav-back-btn text-red-400">
+                    <button onclick="abandonQuiz()" class="nav-back-btn text-red-400" aria-label="放棄並離開測驗">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                     </button>
                     <span id="quiz-progress-text" class="text-xs font-bold text-slate-500 tracking-widest">第 1 / 40 題</span>
                     <span id="quiz-score-display" class="text-sm font-bold text-indigo-600 dark:text-indigo-400">0 分</span>
                 </header>
-                <div class="quiz-progress-bar mx-4">
-                    <div id="quiz-progress-fill" class="quiz-progress-bar-fill" style="width:0%"></div>
+                <div class="quiz-progress-bar mx-4" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                    <div id="quiz-progress-fill" class="quiz-progress-bar-fill transition-all duration-300" style="width:0%"></div>
                 </div>
 
                 <div class="screen-body pt-3">
                     <div class="section-card min-h-[280px] flex flex-col">
                         <div class="flex items-start justify-between gap-4 mb-5">
                             <h3 id="quiz-question" class="text-xl font-bold text-slate-800 dark:text-slate-100 leading-tight flex-1">載入中...</h3>
-                            <button id="quiz-audio-btn" onclick="playVocabAudio('quiz', this, event)" class="audio-btn flex-shrink-0">
+                            <button id="quiz-audio-btn" onclick="playVocabAudio('quiz', this, event)" class="audio-btn flex-shrink-0" aria-label="播放發音">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>
                             </button>
                         </div>
@@ -210,29 +205,28 @@
                                 💡 提示 <span id="hint-cost" class="text-amber-400 text-xs font-normal">(-5分)</span>
                             </button>
                         </div>
-                        <div id="quiz-feedback" class="mt-4 hidden p-4 rounded-xl text-base font-medium leading-relaxed border"></div>
+                        <div id="quiz-feedback" class="mt-4 hidden p-4 rounded-xl text-base font-medium leading-relaxed border" aria-live="assertive"></div>
                     </div>
                     <button id="next-quiz-btn" onclick="advanceQuiz()" class="btn-primary w-full text-base hidden">下一題 ➔</button>
                 </div>
             </div>
 
-            <!-- QUIZ RESULTS -->
             <div id="quiz-results" class="hidden">
                 <header class="app-nav-bar">
-                    <div class="app-nav-title">測驗結果</div>
-                    <button onclick="toggleDarkMode()" id="dark-mode-btn-results" class="nav-icon-btn">🌙</button>
+                    <h1 class="app-nav-title">測驗結果</h1>
+                    <button onclick="toggleDarkMode()" id="dark-mode-btn-results" class="nav-icon-btn" aria-label="切換深色模式">🌙</button>
                 </header>
                 <div class="screen-body">
                     <div class="text-center mb-5 section-card">
                         <p id="results-day-label" class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3"></p>
                         <div id="results-score" class="text-8xl font-black mb-1"></div>
                         <p class="text-slate-400 text-sm mb-3">分 / 100</p>
-                        <div id="results-stars" class="text-3xl mb-3"></div>
+                        <div id="results-stars" class="text-3xl mb-3" aria-hidden="true"></div>
                         <p id="results-summary" class="text-slate-500 text-sm font-medium"></p>
                     </div>
 
                     <div id="missed-section" class="hidden section-card border-red-100 dark:border-red-900/30 mb-4 p-0 overflow-hidden">
-                        <button onclick="toggleMissedWords()" class="w-full flex items-center justify-between p-4 text-left">
+                        <button onclick="toggleMissedWords()" class="w-full flex items-center justify-between p-4 text-left" aria-expanded="false" aria-controls="missed-list">
                             <span id="missed-title" class="font-bold text-red-500 dark:text-red-400 text-sm"></span>
                             <svg id="missed-chevron" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                         </button>
@@ -246,58 +240,56 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- ===== SCREEN: STATS ===== -->
-        <div id="screen-stats" class="screen hidden">
+        <section id="screen-stats" class="screen hidden">
             <header class="app-nav-bar">
-                <div class="app-nav-title">學習統計</div>
-                <button onclick="toggleDarkMode()" id="dark-mode-btn-stats" class="nav-icon-btn">🌙</button>
+                <h1 class="app-nav-title">學習統計</h1>
+                <button onclick="toggleDarkMode()" id="dark-mode-btn-stats" class="nav-icon-btn" aria-label="切換深色模式">🌙</button>
             </header>
             <div class="screen-body">
                 <div class="section-card">
-                    <div class="section-label">需要加強的單字</div>
-                    <div id="weak-words-list" class="text-sm text-slate-500">載入中...</div>
+                    <h2 class="section-label">需要加強的單字</h2>
+                    <div id="weak-words-list" class="text-sm text-slate-500" aria-live="polite">載入中...</div>
                 </div>
                 <div class="section-card">
-                    <div class="section-label">測驗歷史</div>
-                    <div id="history-list" class="space-y-2">載入中...</div>
+                    <h2 class="section-label">測驗歷史</h2>
+                    <div id="history-list" class="space-y-2" aria-live="polite">載入中...</div>
                 </div>
             </div>
-        </div>
+        </section>
 
-    </div><!-- /#app -->
+    </main>
 
-</div><!-- /#phone-wrap -->
+    <nav id="bottom-nav" aria-label="底部導覽列">
+        <button onclick="switchScreen('home')" id="tab-home" class="tab-btn tab-btn-active" aria-label="主頁">
+            <svg xmlns="http://www.w3.org/2000/svg" class="tab-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+            <span class="tab-label">主頁</span>
+        </button>
+        <button onclick="switchScreen('study')" id="tab-study" class="tab-btn" aria-label="學習">
+            <svg xmlns="http://www.w3.org/2000/svg" class="tab-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+            <span class="tab-label">學習</span>
+        </button>
+        <button onclick="switchScreen('quiz')" id="tab-quiz" class="tab-btn" aria-label="測驗">
+            <svg xmlns="http://www.w3.org/2000/svg" class="tab-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+            <span class="tab-label">測驗</span>
+        </button>
+        <button onclick="switchScreen('stats')" id="tab-stats" class="tab-btn" aria-label="統計">
+            <svg xmlns="http://www.w3.org/2000/svg" class="tab-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            <span class="tab-label">統計</span>
+        </button>
+    </nav>
 
-<!-- Bottom Navigation Bar (outside phone-wrap so fixed positioning works) -->
-<div id="bottom-nav">
-    <button onclick="switchScreen('home')" id="tab-home" class="tab-btn tab-btn-active">
-        <svg xmlns="http://www.w3.org/2000/svg" class="tab-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-        <span class="tab-label">主頁</span>
-    </button>
-    <button onclick="switchScreen('study')" id="tab-study" class="tab-btn">
-        <svg xmlns="http://www.w3.org/2000/svg" class="tab-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
-        <span class="tab-label">學習</span>
-    </button>
-    <button onclick="switchScreen('quiz')" id="tab-quiz" class="tab-btn">
-        <svg xmlns="http://www.w3.org/2000/svg" class="tab-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
-        <span class="tab-label">測驗</span>
-    </button>
-    <button onclick="switchScreen('stats')" id="tab-stats" class="tab-btn">
-        <svg xmlns="http://www.w3.org/2000/svg" class="tab-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
-        <span class="tab-label">統計</span>
-    </button>
 </div>
 
-<script src="js/vocab.js"></script>
-<script src="js/store.js"></script>
-<script src="js/audio.js"></script>
-<script src="js/ui.js"></script>
-<script src="js/views/home.js"></script>
-<script src="js/views/study.js"></script>
-<script src="js/views/quiz.js"></script>
-<script src="js/views/stats.js"></script>
-<script src="js/main.js"></script>
+<script src="js/vocab.js" defer></script>
+<script src="js/store.js" defer></script>
+<script src="js/audio.js" defer></script>
+<script src="js/ui.js" defer></script>
+<script src="js/views/home.js" defer></script>
+<script src="js/views/study.js" defer></script>
+<script src="js/views/quiz.js" defer></script>
+<script src="js/views/stats.js" defer></script>
+<script src="js/main.js" defer></script>
 </body>
 </html>

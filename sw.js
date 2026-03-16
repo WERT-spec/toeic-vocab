@@ -3,7 +3,7 @@
 // DATA_CACHE:  單字資料（vocab.js）—— network-first，有網路時更新，無網路用快取
 // CDN_CACHE:   外部 CDN 資源 —— stale-while-revalidate
 
-const SHELL_VERSION = 'v4';
+const SHELL_VERSION = 'v5';
 const SHELL_CACHE = `toeic-shell-${SHELL_VERSION}`;
 const DATA_CACHE  = 'toeic-data-v1';
 const CDN_CACHE   = 'toeic-cdn-v1';
