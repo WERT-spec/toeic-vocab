@@ -33,7 +33,7 @@ function switchStudySubTab(subTab) {
 
 // ===== FLASHCARD =====
 
-let touchStartX = 0, touchStartY = 0, isSwipeAction = false, swipeContainer = null, lastSwipeTime = 0;
+let touchStartX = 0, touchStartY = 0, isSwipeAction = false, isScrolling = false, swipeContainer = null, lastSwipeTime = 0;
 
 function initCardSwipes() {
     const card = document.getElementById('flashcard-inner');
@@ -41,13 +41,30 @@ function initCardSwipes() {
     if (!card || card._swipeInit) return;
 
     const onStart = (x, y) => {
-        touchStartX = x; touchStartY = y; isSwipeAction = false;
+        // Prevent edge swipe interference (system back/forward)
+        if (x < 30 || x > window.innerWidth - 30) return;
+        
+        touchStartX = x; touchStartY = y; 
+        isSwipeAction = false; isScrolling = false;
         if (swipeContainer) swipeContainer.style.transition = 'none';
     };
 
-    const onMove = (x) => {
+    const onMove = (x, y) => {
+        if (isScrolling || touchStartX === 0) return; // Already determined as scroll or invalid start
+
         const dx = x - touchStartX;
-        if (Math.abs(dx) > 10) isSwipeAction = true;
+        const dy = y - touchStartY;
+        
+        // Determine primary direction if not yet decided
+        if (!isSwipeAction && !isScrolling) {
+            if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)) {
+                isScrolling = true;
+                return;
+            } else if (Math.abs(dx) > 15) {
+                isSwipeAction = true;
+            }
+        }
+
         if (isSwipeAction && swipeContainer) {
             swipeContainer.style.transform = `translateX(${dx}px) rotate(${dx * 0.05}deg)`;
             const color = dx > 0 ? '34, 197, 94' : '239, 68, 68';
@@ -56,13 +73,20 @@ function initCardSwipes() {
     };
 
     const onEnd = (x) => {
+        if (touchStartX === 0 || isScrolling) {
+            touchStartX = 0;
+            return;
+        }
+        
         const dx = x - touchStartX;
-        if (Math.abs(dx) > 10) lastSwipeTime = Date.now();
+        touchStartX = 0; // reset
+        
+        if (Math.abs(dx) > 15) lastSwipeTime = Date.now();
 
         if (swipeContainer) swipeContainer.style.transition = 'transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1)';
         card.style.boxShadow = '';
 
-        if (Math.abs(dx) > 80) {
+        if (Math.abs(dx) > 80 && isSwipeAction) {
             isSwipeAction = true;
             const dir = dx > 0 ? 1 : -1;
             swipeContainer.style.transform = `translateX(${dir * window.innerWidth}px) rotate(${dir * 30}deg)`;
@@ -74,7 +98,7 @@ function initCardSwipes() {
     };
 
     card.addEventListener('touchstart', e => onStart(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
-    card.addEventListener('touchmove', e => onMove(e.touches[0].clientX), { passive: true });
+    card.addEventListener('touchmove', e => onMove(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
     card.addEventListener('touchend', e => onEnd(e.changedTouches[0].clientX), { passive: true });
     card._swipeInit = true;
 }
