@@ -68,14 +68,14 @@ function renderHomeScreen() {
 
         if (hasData) {
             html += `
-            <button onclick="selectDay('${dayKey}')" style="--i: ${i}" class="day-cell has-data relative flex flex-col items-center justify-center py-4 rounded-2xl border ${isSelected ? 'is-selected border-violet-500 bg-violet-50' : 'border-slate-200 bg-white'} transition-all hover:scale-105 active:scale-95 shadow-sm">
+            <button onclick="selectDay('${dayKey}')" style="--i: ${i}" class="day-cell has-data relative flex flex-col items-center justify-center py-4 rounded-2xl border ${isSelected ? 'is-selected border-indigo-500 bg-indigo-50/60' : 'border-slate-100 bg-white'} transition-all hover:scale-105 active:scale-95 shadow-sm">
                 <svg width="28" height="28" viewBox="0 0 28 28" class="mb-1.5">
                     <circle cx="14" cy="14" r="11" stroke-width="2" class="${isSelected ? 'day-ring-sel' : 'day-ring'}"/>
                     ${isSelected
                         ? `<circle cx="14" cy="14" r="4.5" class="day-dot-sel"/>`
-                        : (bestScore > 0 ? `<circle cx="14" cy="14" r="4" fill="${isHigh ? '#22c55e' : '#818cf8'}" opacity="0.6"/>` : '')}
+                        : (bestScore > 0 ? `<circle cx="14" cy="14" r="4" fill="${isHigh ? '#25a97e' : '#7b6ef6'}" opacity="0.65"/>` : '')}
                 </svg>
-                <span class="text-[11px] font-black ${isSelected ? 'text-violet-600 dark:text-violet-300' : 'text-slate-500 dark:text-slate-400'}">D${i}</span>
+                <span class="text-[11px] font-black ${isSelected ? 'text-indigo-600 dark:text-indigo-300' : 'text-slate-500 dark:text-slate-400'}">D${i}</span>
             </button>`;
         } else {
             html += `<div class="day-cell flex flex-col items-center justify-center py-4 rounded-2xl border border-slate-100 bg-slate-50 opacity-40" style="--i: ${i}">
