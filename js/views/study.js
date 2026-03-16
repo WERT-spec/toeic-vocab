@@ -5,7 +5,7 @@ function renderStudyScreen() {
     state._reviewOverride = false;
     Debug.study('render', state.dayKey, 'range:', state.range);
 
-    document.getElementById('study-day-label').textContent = `DAY ${state.dayKey.replace('Day ', '')}`;
+    $('study-day-label').textContent = `DAY ${state.dayKey.replace('Day ', '')}`;
     renderRangePills('study-range-pills', state.range, 'setRange');
     switchStudySubTab(state.studySubTab);
     initCardSwipes();
@@ -18,15 +18,15 @@ function switchStudySubTab(subTab) {
     Debug.study('subTab', subTab);
     const isCards = subTab === 'cards';
 
-    const cardsView = document.getElementById('study-cards-view');
-    const listView = document.getElementById('study-list-view');
+    const cardsView = $('study-cards-view');
+    const listView = $('study-list-view');
     [cardsView, listView].forEach(v => v.classList.remove('study-view-fade', 'hidden'));
 
     (isCards ? listView : cardsView).classList.add('hidden');
     (isCards ? cardsView : listView).classList.add('study-view-fade');
 
-    document.getElementById('study-tab-cards').classList.toggle('seg-btn-active', isCards);
-    document.getElementById('study-tab-list').classList.toggle('seg-btn-active', !isCards);
+    $('study-tab-cards').classList.toggle('seg-btn-active', isCards);
+    $('study-tab-list').classList.toggle('seg-btn-active', !isCards);
 
     isCards ? updateCard() : initTable();
 }
@@ -36,7 +36,7 @@ function switchStudySubTab(subTab) {
 let touchStartX = 0, touchStartY = 0, isSwipeAction = false, isScrolling = false, swipeContainer = null, lastSwipeTime = 0;
 
 function initCardSwipes() {
-    const card = document.getElementById('flashcard-inner');
+    const card = $('flashcard-inner');
     swipeContainer = document.querySelector('.card-flip');
     if (!card || card._swipeInit) return;
 
@@ -118,11 +118,11 @@ function markCardMastery(delta) {
 
 function handleCardClick(e) {
     if (Date.now() - lastSwipeTime < 500 || isSwipeAction) { isSwipeAction = false; return; }
-    if (!e.target.closest('button')) document.getElementById('flashcard-inner').classList.toggle('flipped');
+    if (!e.target.closest('button')) $('flashcard-inner').classList.toggle('flipped');
 }
 
 function renderMasteryDots(level) {
-    const el = document.getElementById('card-mastery-dots');
+    const el = $('card-mastery-dots');
     if (!el) return;
     el.innerHTML = Array.from({ length: 3 }, (_, i) =>
         `<div class="w-2.5 h-2.5 rounded-full ${i < level ? 'bg-green-400 dark:bg-green-500 shadow-[0_0_8px_rgba(74,222,128,0.6)]' : 'bg-slate-200 dark:bg-slate-700'}"></div>`
@@ -134,14 +134,14 @@ function updateCard(anim, skipOut) {
     if (!card) return;
     Debug.study('updateCard', card.w, state.card.idx);
 
-    const inner = document.getElementById('flashcard-inner');
+    const inner = $('flashcard-inner');
 
     const apply = () => {
         inner.classList.remove('flipped');
-        document.getElementById('card-word').textContent = card.w;
-        document.getElementById('card-info').textContent = `(${card.p}) ${card.ph}`;
-        document.getElementById('card-meaning').innerHTML = card.m.replace(/[，,]/g, '').replace(/[；;]/g, '<br>');
-        document.getElementById('card-progress').textContent = `${state.card.idx + 1} / ${state.card.activeList.length}`;
+        $('card-word').textContent = card.w;
+        $('card-info').textContent = `(${card.p}) ${card.ph}`;
+        $('card-meaning').innerHTML = card.m.replace(/[，,]/g, '').replace(/[；;]/g, '<br>');
+        $('card-progress').textContent = `${state.card.idx + 1} / ${state.card.activeList.length}`;
         renderMasteryDots(getWordMastery(card.w));
 
         if (anim && typeof anim === 'string') {
@@ -176,7 +176,7 @@ function initTable() {
     const startIdx = state.range === 'all' ? 0 : parseInt(state.range.split('-')[0]) - 1;
     Debug.study('initTable', list.length, 'words');
 
-    document.getElementById('vocab-list-container').innerHTML = list.map((item, idx) => `
+    $('vocab-list-container').innerHTML = list.map((item, idx) => `
         <div class="vocab-list-item bg-white dark:bg-slate-800/80 p-4 rounded-2xl border border-slate-100 dark:border-slate-700/50 shadow-sm flex items-center gap-4 active:scale-[0.98] transition-all">
             <div class="w-8 h-8 flex items-center justify-center bg-slate-50 dark:bg-slate-700 rounded-full text-[10px] font-bold text-slate-400 dark:text-slate-500 shrink-0">${startIdx + idx + 1}</div>
             <div class="flex-[1.5] min-w-0">

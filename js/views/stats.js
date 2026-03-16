@@ -5,13 +5,13 @@ function renderStatsScreen() {
 
     // Weak words
     const weak = getWeakWords();
-    document.getElementById('weak-words-list').innerHTML = weak.length
+    $('weak-words-list').innerHTML = weak.length
         ? weak.slice(0, 20).map(w => `<span class="inline-flex items-center gap-1 px-2 py-1 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg text-xs font-bold mr-2 mb-2">${w}</span>`).join('')
         : '<p class="text-slate-400 text-center py-2">尚無弱點單字</p>';
 
     // History
     const history = loadHistory();
-    document.getElementById('history-list').innerHTML = history.length
+    $('history-list').innerHTML = history.length
         ? history.map(entry => {
             const date = new Date(entry.timestamp).toLocaleDateString('zh-TW', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' });
             const num = (entry.dayKey || '').replace('Day ', '');

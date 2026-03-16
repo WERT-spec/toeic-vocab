@@ -1,4 +1,6 @@
-// ===== STATE =====
+// ===== GLOBALS & STATE =====
+const $ = id => document.getElementById(id);
+
 const state = {
     activeScreen: 'home',
     studySubTab: 'cards',

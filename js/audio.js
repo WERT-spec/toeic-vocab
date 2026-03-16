@@ -1,9 +1,11 @@
 // ===== AUDIO =====
 
 let currentUtterance = null;
+let audioTimeout = null;
+const DIACRITICS_REGEX = /[\u0300-\u036f]/g;
 
 function stripDiacritics(str) {
-    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    return str.normalize('NFD').replace(DIACRITICS_REGEX, '');
 }
 
 function normalize(str) {
@@ -26,13 +28,19 @@ function playAudio(text, btn, e) {
     speechSynthesis.resume();
     speechSynthesis.cancel();
 
+    if (audioTimeout) clearTimeout(audioTimeout);
+    document.querySelectorAll('.is-speaking').forEach(el => el.classList.remove('is-speaking'));
+
     if (btn) {
         btn.classList.add('is-speaking');
-        setTimeout(() => btn.classList.remove('is-speaking'), 3000);
+        audioTimeout = setTimeout(() => btn.classList.remove('is-speaking'), 3000);
     }
 
     currentUtterance = new SpeechSynthesisUtterance(stripDiacritics(text));
     Object.assign(currentUtterance, { lang: 'en-US', rate: 0.9, volume: 1.0 });
-    currentUtterance.onend = currentUtterance.onerror = () => btn?.classList.remove('is-speaking');
+    currentUtterance.onend = currentUtterance.onerror = () => {
+        if (btn) btn.classList.remove('is-speaking');
+        if (audioTimeout) clearTimeout(audioTimeout);
+    };
     setTimeout(() => speechSynthesis.speak(currentUtterance), 50);
 }

@@ -1,7 +1,7 @@
 // ===== SW UPDATE TOAST =====
 
 function showUpdateToast(waitingSW) {
-    if (document.getElementById('sw-update-toast')) return;
+    if ($('sw-update-toast')) return;
     Debug.ui('showUpdateToast');
     const toast = document.createElement('div');
     toast.id = 'sw-update-toast';
@@ -13,7 +13,7 @@ function showUpdateToast(waitingSW) {
 
 function applyUpdate() {
     window._pendingSW?.postMessage({ type: 'SKIP_WAITING' });
-    document.getElementById('sw-update-toast')?.remove();
+    $('sw-update-toast')?.remove();
 }
 
 // ===== NAVIGATION =====
@@ -26,17 +26,17 @@ function switchScreen(name) {
     Debug.ui('switchScreen', prev, '→', name);
 
     SCREENS.forEach(s => {
-        document.getElementById('screen-' + s).classList.add('hidden');
-        document.getElementById('screen-' + s).classList.remove('screen-enter', 'screen-enter-left');
-        document.getElementById('tab-' + s)?.classList.remove('tab-btn-active');
+        $('screen-' + s).classList.add('hidden');
+        $('screen-' + s).classList.remove('screen-enter', 'screen-enter-left');
+        $('tab-' + s)?.classList.remove('tab-btn-active');
     });
 
-    const el = document.getElementById('screen-' + name);
+    const el = $('screen-' + name);
     el.classList.remove('hidden');
     el.classList.add(SCREEN_ORDER[name] < SCREEN_ORDER[prev] ? 'screen-enter-left' : 'screen-enter');
     setTimeout(() => el.classList.remove('screen-enter', 'screen-enter-left'), 300);
 
-    document.getElementById('tab-' + name)?.classList.add('tab-btn-active');
+    $('tab-' + name)?.classList.add('tab-btn-active');
     state.activeScreen = name;
     if (name === 'home')  renderHomeScreen();
     if (name === 'study') renderStudyScreen();
@@ -54,7 +54,7 @@ const DARK_BTN_IDS = ['dark-mode-btn', 'dark-mode-btn-study', 'dark-mode-btn-qui
 
 function syncDarkBtns(isDark) {
     DARK_BTN_IDS.forEach(id => {
-        const el = document.getElementById(id);
+        const el = $(id);
         if (el) el.textContent = isDark ? '☀️' : '🌙';
     });
     document.querySelectorAll('meta[name="theme-color"]').forEach(m => m.remove());
@@ -87,7 +87,7 @@ function setRange(range) {
 }
 
 function renderRangePills(containerId, activeRange, callbackName) {
-    const container = document.getElementById(containerId);
+    const container = $(containerId);
     if (!container) return;
     const count = (vocabData[state.dayKey] || []).length;
 

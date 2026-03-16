@@ -2,25 +2,28 @@
 
 function updateDashboard() {
     let totalWords = 0, masteredWords = 0;
+    const masteryData = getMasteryData();
 
     for (const key in vocabData) {
         const words = vocabData[key];
         totalWords += words.length;
-        masteredWords += words.filter(w => getWordMastery(w.w) > 0).length;
+        for (let i = 0; i < words.length; i++) {
+            if ((masteryData[words[i].w] || 0) > 0) masteredWords++;
+        }
     }
 
     Debug.home('dashboard', { totalWords, masteredWords });
 
     const pct = totalWords ? Math.round((masteredWords / totalWords) * 100) : 0;
 
-    const setText = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    const setText = (id, v) => { const el = $(id); if (el) el.textContent = v; };
     setText('dash-total-count', totalWords);
     setText('dash-mastered-count', masteredWords);
     setText('dash-mastered-count2', masteredWords);
     setText('dash-unmastered-count', totalWords - masteredWords);
     setText('dash-percentage', pct + '%');
 
-    const circle = document.getElementById('dash-progress-circle');
+    const circle = $('dash-progress-circle');
     if (circle) {
         const c = 2 * Math.PI * 15;
         circle.style.strokeDasharray = c;
@@ -35,10 +38,10 @@ function renderHomeScreen() {
 
     updateDashboard();
 
-    const streakText = document.getElementById('streak-text');
+    const streakText = $('streak-text');
     if (streakText) streakText.textContent = `連續 ${Math.max(meta.streakDays || 0, 1)} 天`;
 
-    document.getElementById('day-grid').innerHTML = Array.from({ length: 30 }, (_, i) => {
+    $('day-grid').innerHTML = Array.from({ length: 30 }, (_, i) => {
         const n = i + 1;
         const dayKey = `Day ${String(n).padStart(2, '0')}`;
         const hasData = !!vocabData[dayKey];
