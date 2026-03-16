@@ -43,21 +43,19 @@ input, textarea { user-select: auto; -webkit-user-select: auto; }
 button, a { touch-action: manipulation; }
 
 /* ===== MOBILE-FIRST LAYOUT ===== */
-html {
+html, body {
     height: 100%;
-    height: -webkit-fill-available;
-}
-body {
     background: var(--bg);
-    height: 100%;
-    height: -webkit-fill-available;
 }
 
 #phone-wrap {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100%;
     max-width: 480px;
     margin: 0 auto;
+    /* svh = Small Viewport Height，Safari PWA 中等於真實螢幕高度 */
+    height: 100svh;
+    /* 舊版 Safari fallback */
+    height: -webkit-fill-available;
     background: var(--bg);
     display: flex;
     flex-direction: column;
