@@ -51,7 +51,7 @@ body {
 
 #phone-wrap {
     position: fixed;
-    inset: 0;
+    top: 0; left: 0; right: 0; bottom: 0;
     max-width: 480px;
     margin: 0 auto;
     background: var(--bg);
@@ -65,6 +65,7 @@ body {
     flex: 1;
     overflow: hidden;
     position: relative;
+    /* 移除這裡的 padding，改在 screen-body 處理 */
 }
 
 /* ===== SCREENS ===== */
@@ -144,7 +145,7 @@ html.dark .nav-icon-btn { background: rgba(255,255,255,0.06); }
 .screen-body {
     flex: 1;
     overflow-y: auto;
-    padding: 16px 16px 24px;
+    padding: 16px 16px calc(80px + env(safe-area-inset-bottom, 12px));
     scrollbar-width: none;
     -ms-overflow-style: none;
 }
@@ -217,23 +218,27 @@ html.dark .btn-tinted { color: #9fa8da; }
 
 /* ===== BOTTOM NAV ===== */
 #bottom-nav {
-    flex-shrink: 0;
+    /* 脫離 flex flow，固定在螢幕最底部 */
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    max-width: 480px;
+    margin: 0 auto;
     display: flex;
     align-items: flex-start;
     justify-content: space-around;
     padding-top: 10px;
-    /* 貼底：用 padding-bottom 吸收 home indicator 高度 */
-    padding-bottom: max(env(safe-area-inset-bottom, 0px), 8px);
+    padding-bottom: env(safe-area-inset-bottom, 12px);
     background: rgba(255,255,255,0.97);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     border-top: 1px solid rgba(92,107,192,0.08);
-    /* 不用固定 height，讓 padding 自然撐開 */
+    z-index: 100;
 }
 html.dark #bottom-nav {
     background: rgba(16,16,22,0.97);
     border-top-color: rgba(255,255,255,0.05);
 }
+
 
 .tab-btn {
     flex: 1;
