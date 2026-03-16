@@ -9,7 +9,7 @@ function playVocabAudio(type, btnElement, event) {
         if (type === 'card') text = state.card.activeList[state.card.idx].w;
         else if (type === 'quiz') text = state.quiz.targetWord.w;
         else if (typeof type === 'string' && type.length > 3) text = type; // direct word
-        if (text) playAudio(text.normalize('NFD').replace(/[̀-ͯ]/g, ''), btnElement, event);
+        if (text) playAudio(text, btnElement, event);
     } catch(e) { console.error('Audio error:', e); }
 }
 

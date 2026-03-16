@@ -75,7 +75,7 @@ function getWeakWords() {
 function updateWeakWords(log) {
     try {
         const weak = new Set(getWeakWords());
-        log.forEach(e => { if (!e.isCorrect) weak.add(e.word.w); });
+        log.forEach(e => { if (!e.isCorrect) weak.add(e.word.w); else weak.delete(e.word.w); });
         localStorage.setItem('toeic_v2_weakwords', JSON.stringify([...weak]));
     } catch(e) {}
 }

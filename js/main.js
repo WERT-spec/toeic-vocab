@@ -16,7 +16,4 @@ window.onload = () => {
     
     // 3. Render initial screen
     renderHomeScreen();
-    
-    // 4. Set active tab in bottom navigation
-    document.getElementById('tab-home').classList.add('tab-btn-active');
 };

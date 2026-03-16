@@ -88,13 +88,6 @@ function selectDay(dayKey) {
     state.range = 'all';
     state.card.idx = 0;
     state.card.activeList = getSubList('all');
-    
-    // Update selected state in grid
-    document.querySelectorAll('.day-cell.has-data').forEach(el => {
-        el.classList.remove('border-indigo-400', 'bg-indigo-50', 'dark:bg-indigo-900/30', 'is-selected');
-        el.classList.add('border-slate-200', 'dark:border-slate-700', 'bg-white', 'dark:bg-slate-800');
-    });
-    
     renderHomeScreen();
     savePrefs();
 }

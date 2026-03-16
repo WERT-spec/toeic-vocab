@@ -1,5 +1,5 @@
 const CACHE_NAME = 'toeic-vocab-cache-v2';
-const urlsToCache = [
+const localUrls = [
   './',
   './index.html',
   './css/style.css',
@@ -16,16 +16,20 @@ const urlsToCache = [
   './icon-180.png',
   './icon-192.png',
   './icon-512.png',
+];
+const cdnUrls = [
   'https://cdn.tailwindcss.com',
   'https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js'
 ];
 
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        return cache.addAll(urlsToCache);
-      })
+    caches.open(CACHE_NAME).then(cache =>
+      // Cache local files atomically; attempt CDN files best-effort (don't fail install if unavailable)
+      cache.addAll(localUrls).then(() =>
+        Promise.allSettled(cdnUrls.map(url => cache.add(url)))
+      )
+    )
   );
   self.skipWaiting();
 });
