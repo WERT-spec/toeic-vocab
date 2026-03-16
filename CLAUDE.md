@@ -50,8 +50,4 @@
 
 任何對此專案的修改完成後，**必須**自動將更動同步（Commit & Push）到 GitHub 儲存庫 `https://github.com/WERT-spec/toeic-vocab.git`，以保持遠端版本為最新狀態。
 
-本地使用 `master` 分支，但 GitHub 預設分支為 `main`。每次 push 必須同時更新兩個分支：
-```
-git push origin master
-git push origin master:main
-```
+本地與遠端均使用 `main` 分支。
