@@ -298,15 +298,26 @@ html.dark .tab-btn-active::after { background: #9b96e8; box-shadow: 0 0 6px rgba
     position: relative;
 }
 .dash-card-progress {
-    background: linear-gradient(145deg, #302c96 0%, #1c1a6a 60%, #0f0e3d 100%);
-    border: 1px solid rgba(120,116,220,0.22);
-    box-shadow: 0 4px 24px rgba(88,86,214,0.22);
+    background: linear-gradient(145deg, #4f46e5 0%, #312e81 100%);
+    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 8px 32px rgba(79,70,229,0.25), inset 0 2px 20px rgba(255,255,255,0.1);
 }
+html.dark .dash-card-progress {
+    background: linear-gradient(145deg, #1e1b4b 0%, #0c0a20 100%);
+    border: 1px solid rgba(99,102,241,0.3);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 2px 20px rgba(99,102,241,0.15);
+}
+
 .dash-card-streak {
-    background: linear-gradient(145deg, #2a1040 0%, #160920 100%);
-    border: 1px solid rgba(200,80,180,0.15);
-    box-shadow: 0 4px 20px rgba(140,40,120,0.18);
+    background: linear-gradient(145deg, #c026d3 0%, #701a75 100%);
+    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 8px 32px rgba(192,38,211,0.25), inset 0 2px 20px rgba(255,255,255,0.1);
     min-width: 100px;
+}
+html.dark .dash-card-streak {
+    background: linear-gradient(145deg, #3b0764 0%, #170229 100%);
+    border: 1px solid rgba(217,70,239,0.3);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 2px 20px rgba(217,70,239,0.15);
 }
 
 /* ===== DAY GRID ===== */
