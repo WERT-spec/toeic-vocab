@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -v \"^\\\\.$\")",
+      "Bash(grep -v \"^\\\\..$\")",
+      "Read(//c/Users/毛毛/.claude/debug/**)",
+      "Read(//c/Users/毛毛/.claude/**)"
+    ]
+  }
+}

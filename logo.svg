@@ -1,0 +1,40 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1e40af"/>
+      <stop offset="100%" stop-color="#60a5fa"/>
+    </linearGradient>
+    <linearGradient id="shineGrad" x1="0" y1="0" x2="0" y2="28" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="white" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background rounded square -->
+  <rect width="64" height="64" rx="16" fill="url(#bgGrad)"/>
+  <!-- Top shine -->
+  <rect width="64" height="28" rx="16" fill="url(#shineGrad)"/>
+
+  <!-- Open book: left cover -->
+  <path d="M10 46 L10 20 Q10 17 13 17 L28 17 L28 46 Z" fill="white" fill-opacity="0.9"/>
+  <!-- Open book: right cover -->
+  <path d="M54 46 L54 20 Q54 17 51 17 L36 17 L36 46 Z" fill="white" fill-opacity="0.9"/>
+  <!-- Book spine gap -->
+  <rect x="28" y="17" width="8" height="29" fill="url(#bgGrad)"/>
+  <!-- Book base shadow line -->
+  <rect x="9" y="45" width="46" height="3" rx="1.5" fill="white" fill-opacity="0.6"/>
+
+  <!-- Left page lines -->
+  <rect x="14" y="24" width="10" height="2" rx="1" fill="#3b82f6" fill-opacity="0.55"/>
+  <rect x="14" y="29" width="10" height="2" rx="1" fill="#3b82f6" fill-opacity="0.45"/>
+  <rect x="14" y="34" width="7"  height="2" rx="1" fill="#3b82f6" fill-opacity="0.35"/>
+
+  <!-- Right page lines -->
+  <rect x="40" y="24" width="10" height="2" rx="1" fill="#3b82f6" fill-opacity="0.55"/>
+  <rect x="40" y="29" width="10" height="2" rx="1" fill="#3b82f6" fill-opacity="0.45"/>
+  <rect x="40" y="34" width="7"  height="2" rx="1" fill="#3b82f6" fill-opacity="0.35"/>
+
+  <!-- Star sparkle top-right -->
+  <path d="M51 10 L52 13 L55 13 L52.7 15 L53.6 18 L51 16.2 L48.4 18 L49.3 15 L47 13 L50 13 Z"
+        fill="white" fill-opacity="0.95"/>
+</svg>

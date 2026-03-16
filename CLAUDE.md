@@ -11,17 +11,21 @@
 這是一個純 Vanilla JavaScript 的單頁應用程式（SPA），用於 TOEIC 單字學習。無框架、無打包工具，直接載入 HTML、CSS 與 JS。
 
 **核心檔案：**
-- [index.html](index.html) — 完整應用殼層；透過 CDN 引入 Tailwind CSS，包含分頁結構與天次選擇器格格
-- [js/app.js](js/app.js) — 所有應用邏輯（約 305 行）；全域狀態、渲染、事件處理
-- [js/vocab.js](js/vocab.js) — 單字資料；目前已填入第 01–06 天（計劃共 30 天）；每個單字格式：`{ w, p, ph, m }`（單字、詞性、音標、中文意思）
+- [index.html](index.html) — 完整應用殼層；透過 CDN 引入 Tailwind CSS，包含分頁結構與天次選擇器
+- [js/vocab.js](js/vocab.js) — 單字資料；目前已填入第 01–06 天
+- [js/store.js](js/store.js) — 全域狀態與 LocalStorage 邏輯
+- [js/audio.js](js/audio.js) — Web Speech API 語音播放邏輯
+- [js/ui.js](js/ui.js) — 共用導覽、深色模式與基礎 UI 組件邏輯
+- [js/main.js](js/main.js) — 應用程式進入點與初始化
+- [js/views/](js/views/) — 按功能劃分的視圖邏輯 (home, study, quiz, stats)
 - [css/style.css](css/style.css) — 3D 翻卡動畫、深色模式配色、漸層等自訂樣式
 
 **三種學習模式（分頁）：**
 1. **列表** — 以表格顯示所有單字，每個單字附有發音按鈕
-2. **單字卡** — 3D CSS 翻轉動畫；可用範圍選擇器篩選單字（第 1–10、11–20 等）
-3. **測驗** — 兩種子模式：選擇題（英→中）與輸入題（中→英）；自動洗牌並計分
+2. **單字卡** — 3D CSS 翻轉動畫；可用範圍選擇器篩選單字
+3. **測驗** — 選擇題（英→中）與拼字填空（中→英）；自動洗牌並計分
 
-**狀態管理：** `app.js` 中使用純全域變數 — `currentDayKey`、`currentCardIdx`、`cardState`、`quizState`
+**狀態管理：** `store.js` 中的 `state` 物件管理全域狀態。
 
 **深色模式：** Tailwind `class` 策略；透過 localStorage 切換，套用於 `<html>` 元素
 
@@ -41,3 +45,7 @@
 ]
 ```
 第 07–30 天在 UI 中皆可選取，若無資料則顯示空白。
+
+## 開發與版本控制
+
+任何對此專案的修改完成後，**必須**自動將更動同步（Commit & Push）到 GitHub 儲存庫 `https://github.com/WERT-spec/toeic-vocab.git`，以保持遠端版本為最新狀態。
