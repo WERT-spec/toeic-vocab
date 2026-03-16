@@ -223,26 +223,26 @@ html.dark .btn-tinted { color: #9b96e8; }
 /* ===== BOTTOM NAV ===== */
 #bottom-nav {
     position: fixed;
-    left: 24px; right: 24px;
-    bottom: max(env(safe-area-inset-bottom), 16px);
-    max-width: calc(480px - 48px);
+    left: 0; right: 0;
+    bottom: 0;
+    max-width: 480px;
     margin: 0 auto;
-    height: 64px;
+    height: calc(64px + env(safe-area-inset-bottom));
+    padding-bottom: env(safe-area-inset-bottom);
     display: flex;
     align-items: center;
     justify-content: space-around;
     background: rgba(255,255,255,0.88);
     backdrop-filter: blur(32px);
     -webkit-backdrop-filter: blur(32px);
-    border-radius: 28px;
-    border: 1px solid rgba(0,0,0,0.06);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+    border-top: 1px solid rgba(0,0,0,0.06);
+    box-shadow: 0 -4px 32px rgba(0,0,0,0.04);
     z-index: 100;
 }
 html.dark #bottom-nav {
     background: rgba(28,28,30,0.92);
-    border-color: rgba(255,255,255,0.07);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4);
+    border-top-color: rgba(255,255,255,0.07);
+    box-shadow: 0 -4px 32px rgba(0,0,0,0.4);
 }
 
 .tab-btn {
