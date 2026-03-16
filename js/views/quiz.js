@@ -90,7 +90,7 @@ function setupMCQ() {
     $('quiz-options').classList.remove('hidden');
     $('quiz-typing').classList.add('hidden');
     $('quiz-audio-btn').classList.remove('hidden');
-    $('quiz-question').innerHTML = `<span class="text-indigo-600 dark:text-indigo-400 text-3xl font-black tracking-tight w-full text-center block">${state.quiz.targetWord.w}</span>`;
+    $('quiz-question').innerHTML = `<span class="text-blue-600 dark:text-blue-400 text-3xl font-black tracking-tight w-full text-center block">${state.quiz.targetWord.w}</span>`;
 
     const correct = state.quiz.targetWord.m;
     const options = [correct];
@@ -102,7 +102,7 @@ function setupMCQ() {
 
     $('quiz-options').innerHTML = options.map(opt => `
         <button data-answer="${opt.replace(/"/g, '&quot;')}" onclick="checkMCQAnswer(this)"
-            class="mcq-btn w-full text-left p-5 rounded-xl border-2 border-slate-100 dark:border-slate-700 hover:border-indigo-300 hover:bg-indigo-50 transition-all font-bold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 shadow-sm active:scale-[0.98]">${opt}</button>
+            class="mcq-btn w-full text-left p-5 rounded-xl border-2 border-slate-100 dark:border-slate-700 hover:border-blue-300 hover:bg-blue-50 transition-all font-bold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 shadow-sm active:scale-[0.98]">${opt}</button>
     `).join('');
 }
 
@@ -184,16 +184,16 @@ function checkMCQAnswer(btn) {
     document.querySelectorAll('.mcq-btn').forEach(b => b.disabled = true);
 
     if (isCorrect) {
-        btn.classList.replace('border-slate-100', 'border-green-500');
-        btn.classList.add('bg-green-50', 'text-green-700', 'animate-pop');
+        btn.classList.replace('border-slate-100', 'border-emerald-500');
+        btn.classList.add('bg-emerald-50', 'text-emerald-700', 'animate-pop');
         state.quiz.score += points;
     } else {
-        btn.classList.replace('border-slate-100', 'border-red-500');
-        btn.classList.add('bg-red-50', 'text-red-700', 'animate-shake');
+        btn.classList.replace('border-slate-100', 'border-rose-500');
+        btn.classList.add('bg-rose-50', 'text-rose-700', 'animate-shake');
         document.querySelectorAll('.mcq-btn').forEach(b => {
             if (b.dataset.answer === correct) {
-                b.classList.replace('border-slate-100', 'border-green-500');
-                b.classList.add('bg-green-50');
+                b.classList.replace('border-slate-100', 'border-emerald-500');
+                b.classList.add('bg-emerald-50');
             }
         });
     }
@@ -230,10 +230,10 @@ function showTypingFeedback(isCorrect, word) {
     const info = `<span class="text-xs text-slate-500 italic mt-1 inline-block">(${word.p}) ${word.ph}</span>`;
     if (isCorrect) {
         fb.innerHTML = `✅ 答對了！<br>單字：<span class="font-bold text-lg">${word.w}</span><br>${info}`;
-        fb.className = 'mt-4 p-5 rounded-xl text-base font-bold bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 border-2 border-green-200 dark:border-green-800 shadow-sm';
+        fb.className = 'mt-4 p-5 rounded-xl text-base font-bold bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 border-2 border-emerald-200 dark:border-emerald-800 shadow-sm';
     } else {
-        fb.innerHTML = `❌ 答錯了！<br>正確答案：<span class="font-bold text-lg text-red-700 dark:text-red-400">${word.w}</span><br>${info}`;
-        fb.className = 'mt-4 p-5 rounded-xl text-base font-bold bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 border-2 border-red-200 dark:border-red-800 shadow-sm';
+        fb.innerHTML = `❌ 答錯了！<br>正確答案：<span class="font-bold text-lg text-rose-700 dark:text-rose-400">${word.w}</span><br>${info}`;
+        fb.className = 'mt-4 p-5 rounded-xl text-base font-bold bg-rose-50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-300 border-2 border-rose-200 dark:border-rose-800 shadow-sm';
     }
 }
 
@@ -306,9 +306,9 @@ function showResults() {
                 <div class="flex-1">
                     <div class="font-bold text-slate-800 dark:text-slate-100">${e.word.w}</div>
                     <div class="text-xs text-slate-500 dark:text-slate-400">(${e.word.p}) ${e.word.m.replace(/[，,]/g, '').replace(/[；;]/g, '<br>')}</div>
-                    ${e.userAnswer && e.userAnswer !== e.word.m ? `<div class="text-xs text-red-400 mt-0.5">你的答案：${e.userAnswer}</div>` : ''}
+                    ${e.userAnswer && e.userAnswer !== e.word.m ? `<div class="text-xs text-rose-400 mt-0.5">你的答案：${e.userAnswer}</div>` : ''}
                 </div>
-                <button onclick="playAudio('${e.word.w.replace(/'/g, "\\'")}', this, event)" class="p-2 text-slate-400 hover:text-indigo-500 active:scale-90 transition-all flex-shrink-0">
+                <button onclick="playAudio('${e.word.w.replace(/'/g, "\\'")}', this, event)" class="p-2 text-slate-400 hover:text-blue-500 active:scale-90 transition-all flex-shrink-0">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
                 </button>
             </div>

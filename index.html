@@ -61,14 +61,14 @@
                         <div class="flex-1 min-w-0">
                             <div class="flex items-center gap-1.5 mb-1.5">
                                 <span class="text-xs font-black text-white tracking-wide">整體學習進度</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-indigo-200">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-blue-200">
                                     <path fill-rule="evenodd" d="M9 4.5a.75.75 0 01.721.544l.813 2.846a3.75 3.75 0 002.576 2.576l2.846.813a.75.75 0 010 1.442l-2.846.813a3.75 3.75 0 00-2.576 2.576l-.813 2.846a.75.75 0 01-1.442 0l-.813-2.846a3.75 3.75 0 00-2.576-2.576l-2.846-.813a.75.75 0 010-1.442l2.846-.813A3.75 3.75 0 007.466 7.89l.813-2.846A.75.75 0 019 4.5zM18 1.5a.75.75 0 01.728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 010 1.456l-1.036.258c-.94.236-1.674.97-1.91 1.91l-.258 1.036a.75.75 0 01-1.456 0l-.258-1.036a2.625 2.625 0 00-1.91-1.91l-1.036-.258a.75.75 0 010-1.456l1.036-.258a2.625 2.625 0 001.91-1.91l.258-1.036A.75.75 0 0118 1.5zM16.5 15a.75.75 0 01.712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 010 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 01-1.422 0l-.395-1.183a1.5 1.5 0 00-.948-.948l-1.183-.395a.75.75 0 010-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0116.5 15z" clip-rule="evenodd" />
                                 </svg>
                             </div>
-                            <p class="text-[11px] text-white/80 mb-2.5">已掌握 <span id="dash-mastered-count" class="font-black text-white text-xs">0</span> / <span id="dash-total-count">0</span> 單字</p>
+                            <p class="text-[11px] text-white/80 mb-2.5">已掌握 <span id="dash-masterose-count" class="font-black text-white text-xs">0</span> / <span id="dash-total-count">0</span> 單字</p>
                             <div class="flex gap-3">
-                                <div class="flex items-center gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-indigo-300"></div><span class="text-[10px] text-white/70">已掌握 (<span id="dash-mastered-count2">0</span>)</span></div>
-                                <div class="flex items-center gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-white/30"></div><span class="text-[10px] text-white/70">未熟練 (<span id="dash-unmastered-count">0</span>)</span></div>
+                                <div class="flex items-center gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-blue-300"></div><span class="text-[10px] text-white/70">已掌握 (<span id="dash-masterose-count2">0</span>)</span></div>
+                                <div class="flex items-center gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-white/30"></div><span class="text-[10px] text-white/70">未熟練 (<span id="dash-unmasterose-count">0</span>)</span></div>
                             </div>
                         </div>
                     </div>
@@ -110,16 +110,16 @@
                                     <div id="card-mastery-dots" class="absolute top-5 right-5 flex gap-1"></div>
                                     <h2 id="card-word" class="text-4xl font-bold text-slate-800 dark:text-slate-100 mb-4 tracking-tight text-center px-2 break-all">word</h2>
                                     <div class="flex flex-row items-center gap-3">
-                                        <button id="card-audio-btn" onclick="playVocabAudio('card', this, event); event.stopPropagation();" class="w-12 h-12 flex items-center justify-center bg-slate-50 rounded-full text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all border border-slate-200 shadow-sm active:scale-95" aria-label="播放發音">
+                                        <button id="card-audio-btn" onclick="playVocabAudio('card', this, event); event.stopPropagation();" class="w-12 h-12 flex items-center justify-center bg-slate-50 rounded-full text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-all border border-slate-200 shadow-sm active:scale-95" aria-label="播放發音">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>
                                         </button>
-                                        <div class="bg-indigo-50 px-4 py-1.5 rounded-full border border-indigo-100">
-                                            <span id="card-info" class="text-indigo-600 font-medium text-xs italic"></span>
+                                        <div class="bg-blue-50 px-4 py-1.5 rounded-full border border-blue-100">
+                                            <span id="card-info" class="text-blue-600 font-medium text-xs italic"></span>
                                         </div>
                                     </div>
                                     <p class="text-slate-300 text-[10px] mt-6 uppercase tracking-widest font-bold">點擊卡片空白處翻面</p>
                                 </div>
-                                <div class="card-back bg-indigo-600 rounded-2xl shadow-md flex flex-col items-center justify-center p-6 text-center text-white">
+                                <div class="card-back bg-blue-600 rounded-2xl shadow-md flex flex-col items-center justify-center p-6 text-center text-white">
                                     <h2 id="card-meaning" class="text-3xl font-bold px-4 leading-snug">解釋內容</h2>
                                 </div>
                             </div>
@@ -153,23 +153,23 @@
                         <h2 class="section-label mb-3">選擇模式</h2>
                         <div class="flex flex-col gap-3">
                             <button onclick="selectQuizMode('en-zh')" id="mode-card-en-zh" class="quiz-mode-card flex items-center p-4 rounded-2xl border-2 border-slate-100 dark:border-slate-700/50 text-left transition-all relative overflow-hidden group">
-                                <div class="w-12 h-12 flex items-center justify-center bg-indigo-50/80 dark:bg-indigo-900/20 text-indigo-500 dark:text-indigo-400 rounded-full text-xl mr-4 shrink-0 transition-colors group-[.quiz-mode-card-selected]:bg-indigo-100 dark:group-[.quiz-mode-card-selected]:bg-indigo-900/50" aria-hidden="true">📝</div>
+                                <div class="w-12 h-12 flex items-center justify-center bg-blue-50/80 dark:bg-blue-900/20 text-blue-500 dark:text-blue-400 rounded-full text-xl mr-4 shrink-0 transition-colors group-[.quiz-mode-card-selected]:bg-blue-100 dark:group-[.quiz-mode-card-selected]:bg-blue-900/50" aria-hidden="true">📝</div>
                                 <div class="flex-1">
                                     <div class="font-bold text-slate-800 dark:text-slate-100 text-base mb-0.5">選擇題</div>
                                     <div class="text-xs text-slate-400 dark:text-slate-500 font-medium tracking-wide">英文 → 中文</div>
                                 </div>
-                                <div class="w-5 h-5 rounded-full border-2 border-slate-200 dark:border-slate-600 flex items-center justify-center shrink-0 transition-colors group-[.quiz-mode-card-selected]:border-indigo-500">
-                                    <div class="w-2.5 h-2.5 rounded-full bg-indigo-500 opacity-0 scale-50 transition-all group-[.quiz-mode-card-selected]:opacity-100 group-[.quiz-mode-card-selected]:scale-100"></div>
+                                <div class="w-5 h-5 rounded-full border-2 border-slate-200 dark:border-slate-600 flex items-center justify-center shrink-0 transition-colors group-[.quiz-mode-card-selected]:border-blue-500">
+                                    <div class="w-2.5 h-2.5 rounded-full bg-blue-500 opacity-0 scale-50 transition-all group-[.quiz-mode-card-selected]:opacity-100 group-[.quiz-mode-card-selected]:scale-100"></div>
                                 </div>
                             </button>
                             <button onclick="selectQuizMode('zh-en-type')" id="mode-card-zh-en-type" class="quiz-mode-card flex items-center p-4 rounded-2xl border-2 border-slate-100 dark:border-slate-700/50 text-left transition-all relative overflow-hidden group">
-                                <div class="w-12 h-12 flex items-center justify-center bg-indigo-50/80 dark:bg-indigo-900/20 text-indigo-500 dark:text-indigo-400 rounded-full text-xl mr-4 shrink-0 transition-colors group-[.quiz-mode-card-selected]:bg-indigo-100 dark:group-[.quiz-mode-card-selected]:bg-indigo-900/50" aria-hidden="true">⌨️</div>
+                                <div class="w-12 h-12 flex items-center justify-center bg-blue-50/80 dark:bg-blue-900/20 text-blue-500 dark:text-blue-400 rounded-full text-xl mr-4 shrink-0 transition-colors group-[.quiz-mode-card-selected]:bg-blue-100 dark:group-[.quiz-mode-card-selected]:bg-blue-900/50" aria-hidden="true">⌨️</div>
                                 <div class="flex-1">
                                     <div class="font-bold text-slate-800 dark:text-slate-100 text-base mb-0.5">拼字填空</div>
                                     <div class="text-xs text-slate-400 dark:text-slate-500 font-medium tracking-wide">中文 → 英文</div>
                                 </div>
-                                <div class="w-5 h-5 rounded-full border-2 border-slate-200 dark:border-slate-600 flex items-center justify-center shrink-0 transition-colors group-[.quiz-mode-card-selected]:border-indigo-500">
-                                    <div class="w-2.5 h-2.5 rounded-full bg-indigo-500 opacity-0 scale-50 transition-all group-[.quiz-mode-card-selected]:opacity-100 group-[.quiz-mode-card-selected]:scale-100"></div>
+                                <div class="w-5 h-5 rounded-full border-2 border-slate-200 dark:border-slate-600 flex items-center justify-center shrink-0 transition-colors group-[.quiz-mode-card-selected]:border-blue-500">
+                                    <div class="w-2.5 h-2.5 rounded-full bg-blue-500 opacity-0 scale-50 transition-all group-[.quiz-mode-card-selected]:opacity-100 group-[.quiz-mode-card-selected]:scale-100"></div>
                                 </div>
                             </button>
                         </div>
@@ -182,11 +182,11 @@
 
             <div id="quiz-active" class="hidden">
                 <header class="app-nav-bar">
-                    <button onclick="abandonQuiz()" class="nav-back-btn text-red-400" aria-label="放棄並離開測驗">
+                    <button onclick="abandonQuiz()" class="nav-back-btn text-rose-400" aria-label="放棄並離開測驗">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                     </button>
                     <span id="quiz-progress-text" class="text-xs font-bold text-slate-500 tracking-widest">第 1 / 40 題</span>
-                    <span id="quiz-score-display" class="text-sm font-bold text-indigo-600 dark:text-indigo-400">0 分</span>
+                    <span id="quiz-score-display" class="text-sm font-bold text-blue-600 dark:text-blue-400">0 分</span>
                 </header>
                 <div class="quiz-progress-bar mx-4" role="progressbar" aria-valuemin="0" aria-valuemax="100">
                     <div id="quiz-progress-fill" class="quiz-progress-bar-fill transition-all duration-300" style="width:0%"></div>
@@ -204,7 +204,7 @@
                         <div id="quiz-typing" class="hidden flex-1">
                             <div id="typing-tiles" class="flex flex-wrap justify-center gap-1.5 mb-5 min-h-[52px]"></div>
                             <input type="text" id="typing-input" autocomplete="off" spellcheck="false" placeholder="輸入英文單字後按 Enter…"
-                                class="w-full p-4 border-2 border-slate-200 dark:border-slate-700 rounded-xl mb-3 font-bold text-lg text-slate-700 dark:text-slate-200 dark:bg-slate-800 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-900/40 transition-all text-center tracking-widest">
+                                class="w-full p-4 border-2 border-slate-200 dark:border-slate-700 rounded-xl mb-3 font-bold text-lg text-slate-700 dark:text-slate-200 dark:bg-slate-800 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/40 transition-all text-center tracking-widest">
                             <button onclick="giveHint()" id="hint-btn" class="w-full py-4 bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 border-2 border-amber-200 dark:border-amber-800 rounded-xl font-bold text-sm hover:bg-amber-100 active:scale-95 transition-all">
                                 💡 提示 <span id="hint-cost" class="text-amber-400 text-xs font-normal">(-5分)</span>
                             </button>
@@ -229,9 +229,9 @@
                         <p id="results-summary" class="text-slate-500 text-sm font-medium"></p>
                     </div>
 
-                    <div id="missed-section" class="hidden section-card border-red-100 dark:border-red-900/30 mb-4 p-0 overflow-hidden">
+                    <div id="missed-section" class="hidden section-card border-rose-100 dark:border-rose-900/30 mb-4 p-0 overflow-hidden">
                         <button onclick="toggleMissedWords()" class="w-full flex items-center justify-between p-4 text-left" aria-expanded="false" aria-controls="missed-list">
-                            <span id="missed-title" class="font-bold text-red-500 dark:text-red-400 text-sm"></span>
+                            <span id="missed-title" class="font-bold text-rose-500 dark:text-rose-400 text-sm"></span>
                             <svg id="missed-chevron" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                         </button>
                         <div id="missed-list" class="hidden divide-y divide-slate-100 dark:divide-slate-800"></div>

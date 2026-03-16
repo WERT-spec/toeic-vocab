@@ -18,9 +18,9 @@ function updateDashboard() {
 
     const setText = (id, v) => { const el = $(id); if (el) el.textContent = v; };
     setText('dash-total-count', totalWords);
-    setText('dash-mastered-count', masteredWords);
-    setText('dash-mastered-count2', masteredWords);
-    setText('dash-unmastered-count', totalWords - masteredWords);
+    setText('dash-masterose-count', masteredWords);
+    setText('dash-masterose-count2', masteredWords);
+    setText('dash-unmasterose-count', totalWords - masteredWords);
     setText('dash-percentage', pct + '%');
 
     const circle = $('dash-progress-circle');
@@ -60,12 +60,12 @@ function renderHomeScreen() {
             ? `<circle cx="14" cy="14" r="4.5" class="day-dot-sel"/>`
             : (dotFill ? `<circle cx="14" cy="14" r="4" fill="${dotFill}" opacity="0.65"/>` : '');
 
-        return `<button onclick="selectDay('${dayKey}')" class="day-cell has-data relative flex flex-col items-center justify-center py-4 rounded-2xl border ${isSelected ? 'is-selected border-indigo-500 bg-indigo-50/60' : 'border-slate-100 bg-white'} transition-all hover:scale-105 active:scale-95 shadow-sm">
+        return `<button onclick="selectDay('${dayKey}')" class="day-cell has-data relative flex flex-col items-center justify-center py-4 rounded-2xl border ${isSelected ? 'is-selected border-blue-500 bg-blue-50/60' : 'border-slate-100 bg-white'} transition-all hover:scale-105 active:scale-95 shadow-sm">
             <svg width="28" height="28" viewBox="0 0 28 28" class="mb-1.5">
                 <circle cx="14" cy="14" r="11" stroke-width="2" class="${isSelected ? 'day-ring-sel' : 'day-ring'}"/>
                 ${centerSvg}
             </svg>
-            <span class="text-[11px] font-black ${isSelected ? 'text-indigo-600 dark:text-indigo-300' : 'text-slate-500 dark:text-slate-400'}">D${n}</span>
+            <span class="text-[11px] font-black ${isSelected ? 'text-blue-600 dark:text-blue-300' : 'text-slate-500 dark:text-slate-400'}">D${n}</span>
         </button>`;
     }).join('');
 }

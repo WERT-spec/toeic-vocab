@@ -6,7 +6,7 @@ function renderStatsScreen() {
     // Weak words
     const weak = getWeakWords();
     $('weak-words-list').innerHTML = weak.length
-        ? weak.slice(0, 20).map(w => `<span class="inline-flex items-center gap-1 px-2 py-1 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg text-xs font-bold mr-2 mb-2">${w}</span>`).join('')
+        ? weak.slice(0, 20).map(w => `<span class="inline-flex items-center gap-1 px-2 py-1 bg-rose-50 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400 rounded-lg text-xs font-bold mr-2 mb-2">${w}</span>`).join('')
         : '<p class="text-slate-400 text-center py-2">尚無弱點單字</p>';
 
     // History
