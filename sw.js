@@ -49,7 +49,7 @@ self.addEventListener('install', event => {
       ),
     ])
   );
-  self.skipWaiting();
+  // 不自動 skipWaiting — 等用戶點「立即更新」後才切換
 });
 
 // ===== ACTIVATE: 清除舊版快取 =====
