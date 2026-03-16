@@ -76,7 +76,7 @@ function renderHomeScreen() {
                 <span class="text-[11px] font-black ${isSelected ? 'text-indigo-600 dark:text-indigo-300' : 'text-slate-500 dark:text-slate-400'}">D${i}</span>
             </button>`;
         } else {
-            html += `<div class="day-cell flex flex-col items-center py-2.5 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 opacity-40" style="--i: ${i}"><svg width="28" height="28" viewBox="0 0 28 28"><circle cx="14" cy="14" r="12" fill="none" stroke="#e2e8f0" stroke-width="2.5"/></svg><span class="text-[10px] font-bold text-slate-300">D${i}</span></div>`;
+            html += `<div class="day-cell flex flex-col items-center py-2.5 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 opacity-40" style="--i: ${i}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="text-[10px] font-bold text-slate-300 mt-1">D${i}</span></div>`;
         }
     }
     grid.innerHTML = html;
