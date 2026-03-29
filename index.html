@@ -9,8 +9,12 @@
     <script>
     // Sync theme-color with stored dark-mode preference before first paint
     try {
-        var p = JSON.parse(localStorage.getItem('toeic_prefs') || '{}');
-        if (!p.darkMode) document.querySelector('meta[name="theme-color"]').content = '#fafafa';
+        var p = JSON.parse(localStorage.getItem('toeic_v2_prefs') || '{}');
+        if (p.darkMode) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.querySelector('meta[name="theme-color"]').content = '#fafafa';
+        }
     } catch(e) {}
     </script>
     

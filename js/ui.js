@@ -50,7 +50,7 @@ function goQuiz()  { switchScreen('quiz'); }
 
 // ===== DARK MODE =====
 
-const DARK_BTN_IDS = ['dark-mode-btn', 'dark-mode-btn-study', 'dark-mode-btn-quiz', 'dark-mode-btn-stats'];
+const DARK_BTN_IDS = ['dark-mode-btn', 'dark-mode-btn-study', 'dark-mode-btn-quiz', 'dark-mode-btn-results', 'dark-mode-btn-stats'];
 
 function syncDarkBtns(isDark) {
     DARK_BTN_IDS.forEach(id => {
