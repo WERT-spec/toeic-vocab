@@ -56,7 +56,10 @@ const KEYS = {
 
 function loadPrefs() {
     const p = LS.get(KEYS.prefs, {});
-    if (p.darkMode) { document.documentElement.classList.add('dark'); syncDarkBtns(true); }
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isDark = ('darkMode' in p) ? p.darkMode : prefersDark;
+    if (isDark) { document.documentElement.classList.add('dark'); syncDarkBtns(true); }
+    else { syncDarkBtns(false); }
     if (p.lastDayKey && vocabData[p.lastDayKey]) state.dayKey = p.lastDayKey;
     if (p.lastRange) state.range = p.lastRange;
     if (p.defaultQuizMode) state.quiz.mode = p.defaultQuizMode;
